@@ -15,8 +15,8 @@ This is a temporary script file.
 import pygame
 import random
 
-window_x = 500
-window_y = 550
+window_x = 600
+window_y = 600
 
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -41,9 +41,9 @@ pygame.mixer.music.load("background_music.wav")
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
 
-smallfont = pygame.font.SysFont("comicsansms", 25)
-medfont = pygame.font.SysFont("comicsansms", 50)
-largefont = pygame.font.SysFont("comicsansms", 80)
+smallfont = pygame.font.SysFont("comicsansms", 20)
+medfont = pygame.font.SysFont("comicsansms", 30)
+largefont = pygame.font.SysFont("comicsansms", 50)
 
 def game_intro():
     intro = True
