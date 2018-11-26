@@ -4,61 +4,69 @@ import random
 
 class DoodleJump:
     def __init__(self):
-        self.screen = pygame.display.set_mode((800, 600))
-        self.green = pygame.image.load("assets/green.png").convert_alpha()
-        pygame.font.init()
+        width=800
+        height=600
+        self.screen = pygame.display.set_mode((width, height)) #Initialize window
+        self.green = pygame.image.load("assets/green.png").convert_alpha() #Loads image and converts it to the same pixel format as used by the screen so that it isn't converted everytime it's copied (optimizes performance). Also makes it transparent?
+        pygame.font.init() #Initialize pygame font module
         self.score = 0
         self.font = pygame.font.SysFont("Arial", 25)
         self.blue = pygame.image.load("assets/blue.png").convert_alpha()
         self.red = pygame.image.load("assets/red.png").convert_alpha()
         self.red_1 = pygame.image.load("assets/red_1.png").convert_alpha()
-        self.playerRight = pygame.image.load("assets/right.png").convert_alpha()
+        self.playerRight = pygame.image.load("assets/right.png").convert_alpha() #different images used for jumping/falling
         self.playerRight_1 = pygame.image.load("assets/right_1.png").convert_alpha()
         self.playerLeft = pygame.image.load("assets/left.png").convert_alpha()
         self.playerLeft_1 = pygame.image.load("assets/left_1.png").convert_alpha()
         self.spring = pygame.image.load("assets/spring.png").convert_alpha()
         self.spring_1 = pygame.image.load("assets/spring_1.png").convert_alpha()
-        self.direction = 0
-        self.playerx = 400
-        self.playery = 400
-        self.platforms = [[400, 500, 0, 0]]
+        self.direction = 0 #direction - 0 for right, 1 for left
+        self.playerx = 400 #left-most coordinate of player
+        self.playery = 400 #top-most coordinate of player
+        self.platforms = [[400, 500, 0, 0]] #left and top coordinates of the platform
         self.springs = []
         self.cameray = 0
-        self.jump = 0
-        self.gravity = 0
-        self.xmovement = 0
+        self.jump = 0 #Upwards speed
+        self.gravity = 0 #Downwards speed
+        self.xmovement = 0 # x direction speed - -ve is left, +ve is right, 0 is stationary
     
     def updatePlayer(self):
-        if not self.jump:        
-            self.playery += self.gravity
+        if not self.jump:               #if jump is 0   
+            self.playery += self.gravity#Player moves down by gravity value (gravity increases until collision)
             self.gravity += 1
-        elif self.jump:
-            self.playery -= self.jump
-            self.jump -= 1
-        key = pygame.key.get_pressed()
-        if key[pygame.K_RIGHT]:
+        elif self.jump:                 #if jump isn't 0
+            self.playery -= self.jump   #Player moves up by jump value (jump will decrease to 0)
+            self.jump -= 1          
+        
+        key = pygame.key.get_pressed()  #returns boolean values representing state of every key
+        
+        if key[pygame.K_RIGHT]:         #If the right key's pressed
             if self.xmovement < 10:
-                self.xmovement += 1
+                self.xmovement += 1     #Increase speed to the right within limit
             self.direction = 0
-
-        elif key[pygame.K_LEFT]:
+        elif key[pygame.K_LEFT]:        #If the left key's pressed 
             if self.xmovement > -10:
-                self.xmovement -= 1
-            self.direction = 1
-        else:
+                self.xmovement -= 1     #Increase speed to the left within limit
+            self.direction = 1          
+        else:                           #slow character down (x direction only)
             if self.xmovement > 0:
                 self.xmovement -= 1
             elif self.xmovement < 0:
                 self.xmovement += 1
-        if self.playerx > 850:
-            self.playerx = -50
-        elif self.playerx < -50:
+                
+        if self.playerx > 850:  #If character goes over the edge of the screen (screen width+ just over half of character width)
+            self.playerx = -50  #Move character to the otherside (just over half character width)
+        elif self.playerx < -50: 
             self.playerx = 850
-        self.playerx += self.xmovement
+            
+        self.playerx += self.xmovement #Execute character movement
+        
         if self.playery - self.cameray <= 200:
             self.cameray -= 10
-        if not self.direction:
-            if self.jump:
+            
+        #COPIES THE CHARACTER IMAGE TO THE SCREEN
+        if not self.direction:  
+            if self.jump:       
                 self.screen.blit(self.playerRight_1, (self.playerx, self.playery - self.cameray))
             else:
                 self.screen.blit(self.playerRight, (self.playerx, self.playery - self.cameray))
@@ -70,8 +78,8 @@ class DoodleJump:
 
     def updatePlatforms(self):
         for p in self.platforms:
-            rect = pygame.Rect(p[0], p[1], self.green.get_width() - 10, self.green.get_height())
-            player = pygame.Rect(self.playerx, self.playery, self.playerRight.get_width() - 10, self.playerRight.get_height())
+            rect = pygame.Rect(p[0], p[1], self.green.get_width() - 10, self.green.get_height()) #rectangle (left,top,width,height) representing platform, uses picture dimensions
+            player = pygame.Rect(self.playerx, self.playery, self.playerRight.get_width() - 10, self.playerRight.get_height()) #Rectangle representing player
             if rect.colliderect(player) and self.gravity and self.playery < (p[1] - self.cameray):
                 if p[2] != 2:
                     self.jump = 15
