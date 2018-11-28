@@ -1,6 +1,20 @@
 import pygame
 import random
 
+
+white = (255, 255, 255)
+black = (0, 0, 0)
+green = (0, 200, 0)
+blue = (0, 0, 200)
+FPS = 60
+
+power_up_boost = -40
+power_up_spawn_freq = 7
+
+enemy_freq = 5000
+hs_file = "highscore.txt"
+Font_Name="scoreboard"
+
 class DoodleJump:
     def __init__(self):
         
@@ -13,23 +27,36 @@ class DoodleJump:
         self.playerfall = pygame.image.load("images/sprite_images/frog_sit_sprite.png").convert_alpha() #different images used for jumping/falling
         self.playerRight = pygame.image.load("images/sprite_images/jump_right.png").convert_alpha()
         self.playerLeft = pygame.image.load("images/sprite_images/jump_left.png").convert_alpha()
+        self.fly = pygame.image.load("images/sprite_images/fly_sprite.png").convert_alpha()
+        self.bird = pygame.image.load("images/sprite_images/bird_2.png").convert_alpha()
         pygame.font.init() #Initialize pygame font module
+        pygame.display.set_caption("Next Hop!")
         self.font = pygame.font.SysFont("Arial", 25)
+        self.font_name=pygame.font.match_font(Font_Name)
+        self.clock = pygame.time.Clock()
     
-        self.playerwidth=self.playerfall.get_width()
-        self.playerheight=self.playerfall.get_height()
-        self.platformwidth=self.green.get_width()
-        self.platformheight=self.green.get_height()
+        self.playerwidth = self.playerfall.get_width()
+        self.playerheight = self.playerfall.get_height()
+        self.platformwidth = self.green.get_width()
+        self.platformheight = self.green.get_height()
+        self.birdwidth = self.bird.get_width()
+        self.birdheight = self.bird.get_height()
+        self.flywidth = self.fly.get_width()
+        self.flyheight = self.fly.get_height()
+        
         
         self.score = 0        
         self.direction = 0 #direction - 0 for right, 1 for left
         self.playerx = self.width/2 #left-most coordinate of player
         self.playery = self.height/3 #top-most coordinate of player
         self.platforms = [[400, 500, 0, random.randint(0, 1)]] #left and top coordinates of the platform, platform type, direction platform moves initially
+        self.boosts = [[200, 100, 0, random.randint(0, 1)]]
+        self.enemies = [[200, 100, 0, random.randint(0, 1)]]
         self.cameray = 0 #Used to move the view with the character as it jumps. Everything moves up by value of cameray.
         self.jump = 0 #Upwards speed
         self.gravity = 0 #Downwards speed
         self.xmovement = 0 # x direction speed - -ve is left, +ve is right, 0 is stationary
+        self.gameExit = False
     
     def updatePlayer(self):
         if not self.jump:               #if jump is 0   
@@ -76,7 +103,64 @@ class DoodleJump:
                 self.screen.blit(self.playerLeft, (self.playerx, self.playery - self.cameray))
             else:
                 self.screen.blit(self.playerfall, (self.playerx, self.playery - self.cameray))
-
+"""THIS IS NEW"""            
+    def updateBoosts(self):
+        for b in self.boosts:
+            rect = pygame.Rect(b[0], b[1], self.flywidth, self.flyheight)
+            player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight)
+            
+            if rect.colliderect(player) and self.gravity:
+                if b[2] != 2: #indexes list of self.boosts and says if boost type is 0 does not equal 2
+                    self.jump = 30 #sets new jump height/range to 30 if collision with boost detected
+                    self.gravity = 0 #and new gravity to 0 so the object (player) moves upwards by 30 pixels
+                    
+            if b[2] == 1:
+                if b[-1] == 1:
+                    b[0] += 5
+                    if b[0] > self.width - self.flywidth:
+                        b[-1] = 1
+                        
+                else:
+                    b[0] -= 5
+                    if b[0] <= 0:
+                        b[-1] = 1
+                        
+    def drawBoosts(self):
+        for b in self.boosts:
+            check = self.boosts[-1][1] - self.cameray
+            if check > self.height:
+                boosttype = random.randint(0, 1000) #declares a random spawning position between 0 and 1000
+                if boosttype < 800: #if the position of the spawn is less than 800 then the boost spawns in from the left to right
+                    boosttype = 0
+                else:
+                    boosttype = 1 #else the postion of the spawn is greater than the width of the window and so the boost spawns in from right to left 
+                
+                self.boosts.append([random.randint(0, 700), self.boosts[-1][1] - 50, boosttype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
+                self.boosts.pop(0)           #removes the 0th entry in platforms
+                
+                self.score += 100       
+            
+            #COPIES THE PLATFORM IMAGE TO SCREEN
+            if b[2] == 0:
+                self.screen.blit(self.fly, (b[0], b[1] - self.cameray))
+            elif b[2] == 1:
+                self.screen.blit(self.fly, (b[0], b[1] - self.cameray))
+                
+    def generateBoosts(self):
+        on = 600
+        while on > -100:
+            x = random.randint(0,700)
+            boosttype = random.randint(0, 1000)
+            if boosttype < 800:
+                boosttype = 0
+            elif boosttype < 900:
+                boosttype = 1
+            else:
+                boosttype = 2
+            self.boosts.append([x, on, boosttype, 0])
+            on -= 50
+"""UP TO HERE"""
+                    
     def updatePlatforms(self):
         for p in self.platforms:
             rect = pygame.Rect(p[0], p[1], self.platformwidth, self.platformheight) #rectangle (left,top,width,height) representing platform, uses picture dimensions
@@ -133,8 +217,8 @@ class DoodleJump:
             on -= 50
 
     def drawBackground(self):
-        self.screen.fill(pygame.Color("light blue"))        
-    
+        self.screen.fill(pygame.Color("light blue"))       
+        
     def run(self): #take that out and make into game loop
         
         clock = pygame.time.Clock()
@@ -156,10 +240,63 @@ class DoodleJump:
                 self.playery = self.width/3
             self.drawBackground()
             self.drawPlatforms()
+            self.drawBoosts()
             self.updatePlayer()
             self.updatePlatforms()
+            self.updateBoosts()
             self.screen.blit(self.font.render(str(self.score), -1, (0, 0, 0)), (25, 25))
             pygame.display.flip() 
+            
+""" THIS IS NEW"""            
+    def messageToScreen(self,msg,size, color, x, y):
+        font=pygame.font.Font(self.font_name,size)
+        text_surface=font.render(msg,True,color)
+        text_rect=text_surface.get_rect()
+        text_rect.midtop=(x,y)
+        self.screen.blit(text_surface,text_rect)
+    
+    
+    def startScreen(self):
+        self.screen.fill(blue)
+        self.messageToScreen("Next Hop!",40,white,self.width/2,self.height/2)
+        self.messageToScreen("Press any key to continue...", 25, white, self.width / 2 + 50, self.height / 2 + 50)
+        #self.messageToScreen("High Score: " + str(self.highscore), 25, white, self.width / 2, 35)
+        pygame.display.update()
+        self.waitForKeyPress()
+        DoodleJump().run()
 
+"""CURRENTLY NOT WORKING NEED TO FIX"""
+    def gameOverScreen(self):
+        self.gameDisplay.fill(blue)
+        self.messageToScreen("OOPS!...GAME-OVER", 40, white, self.width / 2, 180)
+        self.messageToScreen("Score : "+(str)(self.score), 40, white, self.width / 2, self.height / 2-100)
+        self.messageToScreen("Press any key to play again...", 30, white, self.width / 2 + 50, self.height / 2 + 50)
 
-DoodleJump().run() # won't need if game loop is external to the class
+        """if self.score > self.highscore:
+            self.highscore = self.score
+            self.messageToScreen("CONGRATULATIONS!!!  NEW HIGH SCORE!", 30, white, self.width / 2, self.height / 2 - 30)
+            with open(path.join(self.dir, hs_file), 'w') as f:                      # writing the new highscore in the file
+                f.write(str(self.score))
+        else:
+                self.messageToScreen("High Score: " + str(self.highscore), 30, white, self.width / 2, self.height / 2 - 30)"""
+
+        pygame.display.update()
+        self.waitForKeyPress()
+        DoodleJump().__init__()
+        DoodleJump().run()
+   
+    def waitForKeyPress(self):
+        waiting=True
+        while waiting:
+            self.clock.tick(FPS)
+            for event in pygame.event.get():
+                if event.type==pygame.QUIT:
+                    waiting=False
+                    self.gameExit=True
+                if event.type==pygame.KEYUP:
+                    waiting=False
+                    self.gameOver=False
+                    self.gameExit=False
+""" UP TO HERE"""
+  
+DoodleJump().startScreen()
