@@ -35,13 +35,13 @@ class PlayerActive(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         
-        self.playerImage = pygame.Surface((30, 60)) #sets dimensions of player image surface
-        self.playerImage.fill(green)
+        self.image = pygame.Surface((30, 60)) #sets dimensions of player image surface
+        self.image.fill(green)
         """self.playerImage = pygame.image.load(os.path.join(img_folder, "frog_sit_sprite.png")).convert() #loads in player image and converts to format that can be used by pygame
         self.playerJump = pygame.image.load(os.path.join(img_folder, "frog_jump_sprite.png")).convert()
         self.playerLeft = pygame.image.load(os.path.join(img_folder, "jump_left.png")).convert()
         self. playerRight = pygame.image.load(os.path.join(img_folder, "jump_right.png")).convert()"""
-        self.playerImage.set_colorkey(blue) #makes background of 
+        self.image.set_colorkey(blue) #makes background of 
         self.rect = self.image.get_rect() #defines a rectangular area where the player image is defined - makes locating image easier
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT - 1
@@ -68,10 +68,10 @@ class PlayerActive(pygame.sprite.Sprite):
             self.rect.right = 0  # contrains character image to the surface
 
 
-class PlatformActive():
+class PlatformActive(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface(30, 5)
+        self.image = pygame.Surface((30, 5))
         self.image.fill(black)
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(WIDTH - self.rect.width) #ensures that platforms spawn in at random x coordinates between the width of the gameWindow and the width of the platform
@@ -87,7 +87,7 @@ class PlatformActive():
 
 
 
-class FlyActive():
+class FlyActive(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface(5, 5)
@@ -119,14 +119,7 @@ while gameActive:
         if event.type == pygame.QUIT:
             gameActive = False
             
-    activeKey = pygame.key.get_pressed()
-    
-    if activeKey[pygame.K_RIGHT]:
-        player.move(1, 0)
-    if activeKey[pygame.K_LEFT]:
-        player.move(-1, 0)
-    if activeKey[pygame.K_UP]:
-        player.move(-1, 0)
+
     
     # UPDATE    
     all_sprites.update()
