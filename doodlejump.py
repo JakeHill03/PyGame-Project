@@ -8,8 +8,8 @@ class DoodleJump:
         self.height=600
 
         self.screen = pygame.display.set_mode((self.width, self.height)) #Initialize window
-        self.green = pygame.image.load("assets/green.png").convert_alpha() #Loads image and converts it to the same pixel format as used by the screen so that it isn't converted everytime it's copied (optimizes performance). Also makes it transparent?
-        self.blue = pygame.image.load("assets/blue.png").convert_alpha()
+        self.green = pygame.image.load("images/sprite_images/lily_pad_sprite.png").convert_alpha() #Loads image and converts it to the same pixel format as used by the screen so that it isn't converted everytime it's copied (optimizes performance). Also makes it transparent?
+        self.blue = pygame.image.load("images/sprite_images/lily_pad_sprite.png").convert_alpha()
         self.playerfall = pygame.image.load("images/sprite_images/frog_sit_sprite.png").convert_alpha() #different images used for jumping/falling
         self.playerRight = pygame.image.load("images/sprite_images/jump_right.png").convert_alpha()
         self.playerLeft = pygame.image.load("images/sprite_images/jump_left.png").convert_alpha()
@@ -97,7 +97,7 @@ class DoodleJump:
                     if p[0] <= 0:
                         p[-1] = 1
 
-    def drawPlatforms(self):
+    def drawPlatforms(self): #platforms use stephens example
         for p in self.platforms:
             check = self.platforms[1][1] - self.cameray #If the last platform is out of view
             if check > self.height:                     #Define new platform
@@ -135,7 +135,7 @@ class DoodleJump:
     def drawBackground(self):
         self.screen.fill(pygame.Color("light blue"))        
     
-    def run(self):
+    def run(self): #take that out and make into game loop
         
         clock = pygame.time.Clock()
         self.generatePlatforms()
@@ -162,4 +162,4 @@ class DoodleJump:
             pygame.display.flip() 
 
 
-DoodleJump().run()
+DoodleJump().run() # won't need if game loop is external to the class
