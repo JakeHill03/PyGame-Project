@@ -8,8 +8,8 @@ class DoodleJump:
         self.height=600
 
         self.screen = pygame.display.set_mode((self.width, self.height)) #Initialize window
-        self.green = pygame.image.load("assets/green.png").convert_alpha() #Loads image and converts it to the same pixel format as used by the screen so that it isn't converted everytime it's copied (optimizes performance). Also makes it transparent?
-        self.blue = pygame.image.load("assets/blue.png").convert_alpha()
+        self.green = pygame.image.load("images/sprite_images/lily_pad_sprite.png").convert_alpha() #Loads image and converts it to the same pixel format as used by the screen so that it isn't converted everytime it's copied (optimizes performance). Also makes it transparent?
+        self.blue = pygame.image.load("images/sprite_images/lily_pad_sprite.png").convert_alpha()
         self.playerfall = pygame.image.load("images/sprite_images/frog_sit_sprite.png").convert_alpha() #different images used for jumping/falling
         self.playerRight = pygame.image.load("images/sprite_images/jump_right.png").convert_alpha()
         self.playerLeft = pygame.image.load("images/sprite_images/jump_left.png").convert_alpha()
