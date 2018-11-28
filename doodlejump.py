@@ -97,7 +97,7 @@ class DoodleJump:
                     if p[0] <= 0:
                         p[-1] = 1
 
-    def drawPlatforms(self):
+    def drawPlatforms(self): #platforms use stephens example
         for p in self.platforms:
             check = self.platforms[1][1] - self.cameray #If the last platform is out of view
             if check > self.height:                     #Define new platform
@@ -135,7 +135,7 @@ class DoodleJump:
     def drawBackground(self):
         self.screen.fill(pygame.Color("light blue"))        
     
-    def run(self):
+    def run(self): #take that out and make into game loop
         
         clock = pygame.time.Clock()
         self.generatePlatforms()
@@ -162,4 +162,4 @@ class DoodleJump:
             pygame.display.flip() 
 
 
-DoodleJump().run()
+DoodleJump().run() # won't need if game loop is external to the class
