@@ -34,6 +34,7 @@ class DoodleJump:
         self.font = pygame.font.SysFont("Arial", 25)
         self.font_name=pygame.font.match_font(Font_Name)
         self.clock = pygame.time.Clock()
+        self.gameOver = False
     
         self.playerwidth = self.playerfall.get_width()
         self.playerheight = self.playerfall.get_height()
@@ -103,7 +104,7 @@ class DoodleJump:
                 self.screen.blit(self.playerLeft, (self.playerx, self.playery - self.cameray))
             else:
                 self.screen.blit(self.playerfall, (self.playerx, self.playery - self.cameray))
-"""THIS IS NEW"""            
+"""NEW UP TO HERE"""      
     def updateBoosts(self):
         for b in self.boosts:
             rect = pygame.Rect(b[0], b[1], self.flywidth, self.flyheight)
@@ -159,7 +160,7 @@ class DoodleJump:
                 boosttype = 2
             self.boosts.append([x, on, boosttype, 0])
             on -= 50
-"""UP TO HERE"""
+"""NEW UP TO HERE"""
                     
     def updatePlatforms(self):
         for p in self.platforms:
@@ -183,7 +184,7 @@ class DoodleJump:
 
     def drawPlatforms(self): #platforms use stephens example
         for p in self.platforms:
-            check = self.platforms[1][1] - self.cameray #If the last platform is out of view
+            check = self.platforms[0][1] - self.cameray #If the last platform is out of view
             if check > self.height:                     #Define new platform
                 platformtype = random.randint(0, 1000)
                 if platformtype < 800:
@@ -233,11 +234,13 @@ class DoodleJump:
 
             if self.playery - self.cameray > 700: #Restarts when character falls off view
                 self.cameray = 0
-                self.score = 0
+                self.score = self.score()
                 self.platforms = [[400, 500, 0, 0]]
                 self.generatePlatforms()
                 self.playerx = self.width/2
                 self.playery = self.width/3
+                self.gameOver == True
+                self.gameOverScreen()
             self.drawBackground()
             self.drawPlatforms()
             self.drawBoosts()
@@ -247,7 +250,7 @@ class DoodleJump:
             self.screen.blit(self.font.render(str(self.score), -1, (0, 0, 0)), (25, 25))
             pygame.display.flip() 
             
-""" THIS IS NEW"""            
+"NEW FROM HERE"""         
     def messageToScreen(self,msg,size, color, x, y):
         font=pygame.font.Font(self.font_name,size)
         text_surface=font.render(msg,True,color)
@@ -257,7 +260,7 @@ class DoodleJump:
     
     
     def startScreen(self):
-        self.screen.fill(blue)
+        self.screen.fill(pygame.Color ("light blue"))
         self.messageToScreen("Next Hop!",40,white,self.width/2,self.height/2)
         self.messageToScreen("Press any key to continue...", 25, white, self.width / 2 + 50, self.height / 2 + 50)
         #self.messageToScreen("High Score: " + str(self.highscore), 25, white, self.width / 2, 35)
@@ -265,21 +268,12 @@ class DoodleJump:
         self.waitForKeyPress()
         DoodleJump().run()
 
-"""CURRENTLY NOT WORKING NEED TO FIX"""
+
     def gameOverScreen(self):
-        self.gameDisplay.fill(blue)
+        self.screen.fill(pygame.Color("light blue"))
         self.messageToScreen("OOPS!...GAME-OVER", 40, white, self.width / 2, 180)
         self.messageToScreen("Score : "+(str)(self.score), 40, white, self.width / 2, self.height / 2-100)
         self.messageToScreen("Press any key to play again...", 30, white, self.width / 2 + 50, self.height / 2 + 50)
-
-        """if self.score > self.highscore:
-            self.highscore = self.score
-            self.messageToScreen("CONGRATULATIONS!!!  NEW HIGH SCORE!", 30, white, self.width / 2, self.height / 2 - 30)
-            with open(path.join(self.dir, hs_file), 'w') as f:                      # writing the new highscore in the file
-                f.write(str(self.score))
-        else:
-                self.messageToScreen("High Score: " + str(self.highscore), 30, white, self.width / 2, self.height / 2 - 30)"""
-
         pygame.display.update()
         self.waitForKeyPress()
         DoodleJump().__init__()
@@ -297,6 +291,6 @@ class DoodleJump:
                     waiting=False
                     self.gameOver=False
                     self.gameExit=False
-""" UP TO HERE"""
-  
+
+"""NEW UP TO HERE"""  
 DoodleJump().startScreen()
