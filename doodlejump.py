@@ -104,7 +104,7 @@ class DoodleJump:
                 self.screen.blit(self.playerLeft, (self.playerx, self.playery - self.cameray))
             else:
                 self.screen.blit(self.playerfall, (self.playerx, self.playery - self.cameray))
-"""NEW UP TO HERE"""      
+#"""NEW UP TO HERE"""      
     def updateBoosts(self):
         for b in self.boosts:
             rect = pygame.Rect(b[0], b[1], self.flywidth, self.flyheight)
@@ -112,7 +112,7 @@ class DoodleJump:
             
             if rect.colliderect(player) and self.gravity:
                 if b[2] != 2: #indexes list of self.boosts and says if boost type is 0 does not equal 2
-                    self.jump = 30 #sets new jump height/range to 30 if collision with boost detected
+                    self.jump = 80 #sets new jump height/range to 30 if collision with boost detected
                     self.gravity = 0 #and new gravity to 0 so the object (player) moves upwards by 30 pixels
                     
             if b[2] == 1:
@@ -136,10 +136,10 @@ class DoodleJump:
                 else:
                     boosttype = 1 #else the postion of the spawn is greater than the width of the window and so the boost spawns in from right to left 
                 
-                self.boosts.append([random.randint(0, 700), self.boosts[-1][1] - 50, boosttype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
-                self.boosts.pop(0)           #removes the 0th entry in platforms
+                self.boosts.append([random.randint(0, 700), self.boosts[-1][1] - 800, boosttype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
+                self.boosts.pop(0)           #removes the 0th entry in boosts
                 
-                self.score += 100       
+                #self.score += 100       
             
             #COPIES THE PLATFORM IMAGE TO SCREEN
             if b[2] == 0:
@@ -160,7 +160,7 @@ class DoodleJump:
                 boosttype = 2
             self.boosts.append([x, on, boosttype, 0])
             on -= 50
-"""NEW UP TO HERE"""
+#"""NEW UP TO HERE"""
                     
     def updatePlatforms(self):
         for p in self.platforms:
@@ -234,7 +234,6 @@ class DoodleJump:
 
             if self.playery - self.cameray > 700: #Restarts when character falls off view
                 self.cameray = 0
-                self.score = self.score()
                 self.platforms = [[400, 500, 0, 0]]
                 self.generatePlatforms()
                 self.playerx = self.width/2
@@ -250,7 +249,7 @@ class DoodleJump:
             self.screen.blit(self.font.render(str(self.score), -1, (0, 0, 0)), (25, 25))
             pygame.display.flip() 
             
-"NEW FROM HERE"""         
+#"NEW FROM HERE"""         
     def messageToScreen(self,msg,size, color, x, y):
         font=pygame.font.Font(self.font_name,size)
         text_surface=font.render(msg,True,color)
@@ -292,5 +291,5 @@ class DoodleJump:
                     self.gameOver=False
                     self.gameExit=False
 
-"""NEW UP TO HERE"""  
+#"""NEW UP TO HERE"""  
 DoodleJump().startScreen()
