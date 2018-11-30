@@ -104,6 +104,7 @@ class DoodleJump:
                 self.screen.blit(self.playerLeft, (self.playerx, self.playery - self.cameray))
             else:
                 self.screen.blit(self.playerfall, (self.playerx, self.playery - self.cameray))
+
 #"""NEW UP TO HERE"""      
     def updateBoosts(self):
         for b in self.boosts:
