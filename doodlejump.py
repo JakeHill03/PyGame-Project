@@ -116,7 +116,7 @@ class DoodleJump:
             
             if rect.colliderect(player):
                 if b[2] != 2: #indexes list of self.boosts and says if boost type is 0 does not equal 2
-                    self.jump = 70 #sets new jump height/range to 80 if collision with boost detected
+                    self.jump = 40 #sets new jump height/range to 80 if collision with boost detected
                     self.gravity = 0 #and new gravity to 0 so the object (player) moves upwards
                     
             if b[2] == 1:
@@ -196,7 +196,7 @@ class DoodleJump:
                 else:
                     platformtype = 1
 
-                self.platforms.append([random.randint(0, 700), self.platforms[-1][1] - 50, platformtype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
+                self.platforms.append([random.randint(0, 700), self.platforms[-1][1] - 52, platformtype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
                 self.platforms.pop(0)           #removes the 0th entry in platforms
                 
                 self.score += 100       
