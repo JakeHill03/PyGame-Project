@@ -114,10 +114,10 @@ class DoodleJump:
             rect = pygame.Rect(b[0], b[1], self.flywidth, self.flyheight)
             player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight)
             
-            if rect.colliderect(player) and self.gravity:
+            if rect.colliderect(player):
                 if b[2] != 2: #indexes list of self.boosts and says if boost type is 0 does not equal 2
-                    self.jump = 80 #sets new jump height/range to 30 if collision with boost detected
-                    self.gravity = 0 #and new gravity to 0 so the object (player) moves upwards by 30 pixels
+                    self.jump = 70 #sets new jump height/range to 80 if collision with boost detected
+                    self.gravity = 0 #and new gravity to 0 so the object (player) moves upwards
                     
             if b[2] == 1:
                 if b[-1] == 1:
@@ -140,7 +140,7 @@ class DoodleJump:
                 else:
                     boosttype = 1 #else the postion of the spawn is greater than the width of the window and so the boost spawns in from right to left 
                 
-                self.boosts.append([random.randint(0, 700), self.boosts[-1][1] - 800, boosttype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
+                self.boosts.append([random.randint(0, 700), self.boosts[-1][1] - 1000, boosttype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
                 self.boosts.pop(0)           #removes the 0th entry in boosts
                 
                 #self.score += 100       
