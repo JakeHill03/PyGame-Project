@@ -90,8 +90,11 @@ class DoodleJump:
             
         self.playerx += self.xmovement #Execute character movement
         
-        if self.playery - self.cameray <= 200: #Defines the window view relative to the character. This value is distance between window and character allowed.
-            self.cameray -= 10   #increment of window moving upward (smaller = smoother, larger= moves up in stages)
+        if self.playery - self.cameray <= 200:
+            if self.jump >15 :
+                self.cameray -= 60   #Defines the window view relative to the character. This value is distance between window and character allowed.
+            else:
+                self.cameray -= 10   #increment of window moving upward (smaller = smoother, larger= moves up in stages)
             
         #COPIES THE CHARACTER IMAGE TO THE SCREEN
         if not self.direction:  
