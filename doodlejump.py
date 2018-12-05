@@ -3,7 +3,7 @@ import random
 from os import path
 
 
-white = (255, 255, 255)
+white = (255, 255, 255) #declare colour variables 
 black = (0, 0, 0)
 green = (0, 200, 0)
 blue = (0, 0, 200)
@@ -16,8 +16,8 @@ enemy_freq = 5000
 hs_file = "highscore.txt"
 Font_Name="scoreboard"
 
-pygame.mixer.pre_init(44100,16,2,4096)
-pygame.init()
+pygame.mixer.pre_init(44100,16,2,4096) #initialises the pygame mixer module for loading and playing sound files and music
+pygame.init() #initialises the pygame module
 
 
 image_dir = path.join(path.dirname(__file__), 'images') #Adds a path to use the images folder, so files can be referenced
@@ -40,20 +40,20 @@ class DoodleJump:
         self.screen = pygame.display.set_mode((self.width, self.height)) #Initialize window
         self.green = pygame.image.load("images/sprite_images/lily_pad_sprite.png").convert_alpha() #Loads image and converts it to the same pixel format as used by the screen so that it isn't converted everytime it's copied (optimizes performance). Also makes it transparent?
         self.blue = pygame.image.load("images/sprite_images/lily_pad_sprite.png").convert_alpha()
-        self.playerfall = pygame.image.load("images/sprite_images/frog_sit_sprite.png").convert_alpha() #different images used for jumping/falling
+        self.playerstat = pygame.image.load("images/sprite_images/frog_sit_sprite.png").convert_alpha() #different images used for jumping/falling
         self.playerRight = pygame.image.load("images/sprite_images/jump_right.png").convert_alpha()
         self.playerLeft = pygame.image.load("images/sprite_images/jump_left.png").convert_alpha()
         self.fly = pygame.image.load("images/sprite_images/fly_sprite.png").convert_alpha()
         self.bird = pygame.image.load("images/sprite_images/bird_2.png").convert_alpha()
         pygame.font.init() #Initialize pygame font module
         pygame.display.set_caption("Next Hop!")
-        self.font = pygame.font.SysFont("Arial", 25)
+        self.font = pygame.font.SysFont("Arial", 25) #initialises the font to default to Arial size 25
         self.font_name=pygame.font.match_font(Font_Name)
         self.clock = pygame.time.Clock()
         self.gameOver = False
     
-        self.playerwidth = self.playerfall.get_width()
-        self.playerheight = self.playerfall.get_height()
+        self.playerwidth = self.playerstat.get_width()
+        self.playerheight = self.playerstat.get_height()
         self.platformwidth = self.green.get_width()
         self.platformheight = self.green.get_height()
         self.birdwidth = self.bird.get_width()
@@ -120,12 +120,12 @@ class DoodleJump:
             if self.jump:       
                 self.screen.blit(self.playerRight, (self.playerx, self.playery - self.cameray))
             else:
-                self.screen.blit(self.playerfall, (self.playerx, self.playery - self.cameray))
+                self.screen.blit(self.playerstat, (self.playerx, self.playery - self.cameray))
         else:
             if self.jump:
                 self.screen.blit(self.playerLeft, (self.playerx, self.playery - self.cameray))
             else:
-                self.screen.blit(self.playerfall, (self.playerx, self.playery - self.cameray))
+                self.screen.blit(self.playerstat, (self.playerx, self.playery - self.cameray))
 
 #"""NEW UP TO HERE"""      
     def updateBoosts(self):
