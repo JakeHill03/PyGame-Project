@@ -1,5 +1,6 @@
 import pygame
 import random
+from os import path
 
 
 white = (255, 255, 255)
@@ -15,6 +16,21 @@ enemy_freq = 5000
 hs_file = "highscore.txt"
 Font_Name="scoreboard"
 
+pygame.mixer.pre_init(44100,16,2,4096)
+pygame.init()
+
+
+image_dir = path.join(path.dirname(__file__), 'images') #Adds a path to use the images folder, so files can be referenced
+sound_dir = path.join(path.dirname(__file__), 'sound') #Adds path to use sound folder 
+
+# load in sounds
+pygame.mixer.music.load("background_music.wav")
+falling_noise = pygame.mixer.Sound("falling_sound.wav")
+jumping_noise = pygame.mixer.Sound("jump_sound.wav")
+powerup_noise = pygame.mixer.Sound("powerup.wav")
+ #set volume and playback for music   
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play(-1)
 class DoodleJump:
     def __init__(self):
         
@@ -58,11 +74,14 @@ class DoodleJump:
         self.gravity = 0 #Downwards speed
         self.xmovement = 0 # x direction speed - -ve is left, +ve is right, 0 is stationary
         self.gameExit = False
-    
+        
+       
     def updatePlayer(self):
         if not self.jump:               #if jump is 0   
-            self.playery += self.gravity#Player moves down by gravity value (gravity increases until collision)
+            self.playery += self.gravity #Player moves down by gravity value (gravity increases until collision)
             self.gravity += 1
+            
+            
         elif self.jump:                 #if jump isn't 0
             self.playery -= self.jump   #Player moves up by jump value (jump will decrease to 0)
             self.jump -= 1          
@@ -115,7 +134,8 @@ class DoodleJump:
             player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight)
             
             if rect.colliderect(player):
-                if b[2] != 2: #indexes list of self.boosts and says if boost type is 0 does not equal 2
+                if b[2] != 2: 
+                    powerup_noise.play()
                     self.jump = 40 #sets new jump height/range to 80 if collision with boost detected
                     self.gravity = 0 #and new gravity to 0 so the object (player) moves upwards
                     
@@ -165,6 +185,17 @@ class DoodleJump:
             self.boosts.append([x, on, boosttype, 0])
             on -= 50
 #"""NEW UP TO HERE"""
+            
+    """def updateEnemies(self):
+        for e in self.enemies:
+            rect = pygame.Rect(e[0], e[1], self.birdwidth, self.birdheight)
+            player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight)
+            
+            if rect.colliderect(player):
+                if e[2] != 2:
+                    self.gameOver = True"""
+                    
+                
                     
     def updatePlatforms(self):
         for p in self.platforms:
@@ -175,6 +206,7 @@ class DoodleJump:
                 if p[2] != 2:
                     self.jump = 15
                     self.gravity = 0
+                    jumping_noise.play()
                     
             if p[2] == 1:           #Makes platform move
                 if p[-1] == 1:      #Changes direction when gets to edge
@@ -229,6 +261,7 @@ class DoodleJump:
         clock = pygame.time.Clock()
         self.generatePlatforms()
         
+        pygame.mixer.music.play(loops=-1)
         while True:
             self.screen.fill((255,255,255))
             clock.tick(60)
@@ -264,8 +297,9 @@ class DoodleJump:
     
     def startScreen(self):
         self.screen.fill(pygame.Color ("light blue"))
-        self.messageToScreen("Next Hop!",40,white,self.width/2,self.height/2)
-        self.messageToScreen("Press any key to continue...", 25, white, self.width / 2 + 50, self.height / 2 + 50)
+        self.messageToScreen("Next Hop!",75,white,self.width/2 -50,self.height/2 -50)
+        self.messageToScreen("Use the arrow keys to move", 35, white, self.width / 2 + 45, self.height / 2 + 45)
+        self.messageToScreen("Press any key to continue...", 25, white, self.width / 2 + 80, self.height / 2 + 80)
         #self.messageToScreen("High Score: " + str(self.highscore), 25, white, self.width / 2, 35)
         pygame.display.update()
         self.waitForKeyPress()
@@ -274,7 +308,7 @@ class DoodleJump:
 
     def gameOverScreen(self):
         self.screen.fill(pygame.Color("light blue"))
-        self.messageToScreen("OOPS!...GAME-OVER", 40, white, self.width / 2, 180)
+        self.messageToScreen("OOPS!...GAME-OVER", 40, white, self.width / 2 -50, 180)
         self.messageToScreen("Score : "+(str)(self.score), 40, white, self.width / 2, self.height / 2-100)
         self.messageToScreen("Press any key to play again...", 30, white, self.width / 2 + 50, self.height / 2 + 50)
         pygame.display.update()
