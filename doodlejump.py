@@ -67,8 +67,8 @@ class DoodleJump:
         self.playerx = self.width/2 #left-most coordinate of player
         self.playery = self.height/3 #top-most coordinate of player
         self.platforms = [[400, 500, 0, random.randint(0, 1)]] #left and top coordinates of the platform, platform type, direction platform moves initially
-        self.boosts = [[200, 100, 0, random.randint(0, 1)]]
-        self.enemies = [[200, 100, 0, random.randint(0, 1)]]
+        self.boosts = [[200, 100, random.randint(0, 1)]]
+        self.enemies = [[200, 100, random.randint(0, 1)]]
         self.cameray = 0 #Used to move the view with the character as it jumps. Everything moves up by value of cameray.
         self.jump = 0 #Upwards speed
         self.gravity = 0 #Downwards speed
@@ -111,7 +111,7 @@ class DoodleJump:
         
         if self.playery - self.cameray <= 200:
             if self.jump >15 :
-                self.cameray -= 60   #Defines the window view relative to the character. This value is distance between window and character allowed.
+                self.cameray -= 30   #Defines the window view relative to the character. This value is distance between window and character allowed.
             else:
                 self.cameray -= 10   #increment of window moving upward (smaller = smoother, larger= moves up in stages)
             
@@ -186,15 +186,48 @@ class DoodleJump:
             on -= 50
 #"""NEW UP TO HERE"""
             
-    """def updateEnemies(self):
+    def updateEnemies(self):
         for e in self.enemies:
             rect = pygame.Rect(e[0], e[1], self.birdwidth, self.birdheight)
             player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight)
             
             if rect.colliderect(player):
-                if e[2] != 2:
-                    self.gameOver = True"""
+                self.gameOver = True
                     
+    def drawEnemies(self):
+        for e in self.enemies:
+            check = self.enemies[0][1] - self.cameray #If the last platform is out of view
+            if check > self.height:                     #Define new platform
+                enemytype = random.randint(0, 1000)
+                if enemytype < 800:
+                    enemytype = 0
+                else:
+                    enemytype = 1
+
+                self.enemies.append([random.randint(0, 700), self.enemies[-1][1] - 80, enemytype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
+                self.enemies.pop(0)           #removes the 0th entry in platforms
+                
+                self.score += 100       
+            
+            #COPIES THE PLATFORM IMAGE TO SCREEN
+            if e[2] == 0:
+                self.screen.blit(self.bird, (e[0], e[1] - self.cameray))
+            elif e[2] == 1:
+                self.screen.blit(self.bird, (e[0], e[1] - self.cameray))
+                
+    def generateEnemies(self):
+        on = 600
+        while on > -100:
+            x = random.randint(0,700)
+            enemytype = random.randint(0, 1000)
+            if enemytype < 800:
+                enemytype = 0
+            elif enemytype < 900:
+                enemytype = 1
+            else:
+                enemytype = 2
+            self.platforms.append([x, on, enemytype, 0])
+            on -= 50
                 
                     
     def updatePlatforms(self):
@@ -203,7 +236,6 @@ class DoodleJump:
             player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight) #Rectangle representing player
             
             if rect.colliderect(player) and self.gravity: #If the character falls into platform from above it
-                if p[2] != 2:
                     self.jump = 15
                     self.gravity = 0
                     jumping_noise.play()
@@ -228,7 +260,7 @@ class DoodleJump:
                 else:
                     platformtype = 1
 
-                self.platforms.append([random.randint(0, 700), self.platforms[-1][1] - 52, platformtype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
+                self.platforms.append([random.randint(0, 700), self.platforms[-1][1] - 80, platformtype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
                 self.platforms.pop(0)           #removes the 0th entry in platforms
                 
                 self.score += 100       
@@ -280,9 +312,11 @@ class DoodleJump:
             self.drawBackground()
             self.drawPlatforms()
             self.drawBoosts()
+            self.drawEnemies()
             self.updatePlayer()
             self.updatePlatforms()
             self.updateBoosts()
+            self.updateEnemies()
             self.screen.blit(self.font.render(str(self.score), -1, (0, 0, 0)), (25, 25))
             pygame.display.flip() 
             
