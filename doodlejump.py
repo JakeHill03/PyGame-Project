@@ -193,6 +193,7 @@ class DoodleJump:
             
             if rect.colliderect(player):
                 self.gameOver = True
+                self.gameOverScreen()
                     
     def drawEnemies(self):
         for e in self.enemies:
@@ -204,7 +205,7 @@ class DoodleJump:
                 else:
                     enemytype = 1
 
-                self.enemies.append([random.randint(0, 700), self.enemies[-1][1] - 80, enemytype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
+                self.enemies.append([random.randint(0, 700), self.enemies[-1][1] - 800, enemytype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
                 self.enemies.pop(0)           #removes the 0th entry in platforms
                 
                 self.score += 100       
@@ -307,8 +308,8 @@ class DoodleJump:
                 self.generatePlatforms()
                 self.playerx = self.width/2
                 self.playery = self.width/3
-                self.gameOver == True
-                self.gameOverScreen()
+                #self.gameOver == True
+                #self.gameOverScreen()
             self.drawBackground()
             self.drawPlatforms()
             self.drawBoosts()
