@@ -299,7 +299,8 @@ class DoodleJump:
 
     def drawBackground(self):
         self.screen.fill(pygame.Color("light blue"))       
-        
+       
+    
     def run(self): #take that out and make into game loop
         
         clock = pygame.time.Clock()
@@ -307,7 +308,6 @@ class DoodleJump:
         
         pygame.mixer.music.play(loops=-1)
         while True:
-            self.screen.fill((255,255,255))
             clock.tick(60)
             e = pygame.event.poll()
             if e.type == pygame.QUIT:
@@ -342,7 +342,7 @@ class DoodleJump:
     
     
     def startScreen(self):
-        self.screen.fill(pygame.Color ("light blue"))
+        self.drawBackground()
         self.messageToScreen("Next Hop!",75,white,self.width/2 -50,self.height/2 -50)
         self.messageToScreen("Use the arrow keys to move", 35, white, self.width / 2 + 45, self.height / 2 + 45)
         self.messageToScreen("Press any key to continue...", 25, white, self.width / 2 + 80, self.height / 2 + 80)
@@ -353,10 +353,10 @@ class DoodleJump:
 
 
     def gameOverScreen(self):
-        self.screen.fill(pygame.Color("light blue"))
+        self.drawBackground()
         self.messageToScreen("OOPS!...GAME-OVER", 40, white, self.width / 2, self.height / 4)
         self.messageToScreen("Score : "+(str)(self.score), 40, white, self.width / 2, self.height / 2)
-        self.messageToScreen("Press any key to play again...", 30, white, self.width / 2, self.height / 3*4)
+        self.messageToScreen("Press any key to play again...", 30, white, self.width / 2, self.height / (3*4))
         pygame.display.update()
         self.waitForKeyPress()
         DoodleJump().__init__()
