@@ -67,7 +67,7 @@ class DoodleJump:
         self.playerx = self.width/2 #left-most coordinate of player
         self.playery = self.height/3 #top-most coordinate of player
         self.platforms = [[400, 500, 0, random.randint(0, 1)]] #left and top coordinates of the platform, platform type, direction platform moves initially
-        self.boosts = [[200, 100, random.randint(0, 1)]]
+        self.boosts = [[200, 300, random.randint(0, 1)]]
         self.enemies = [[200, 100, random.randint(0, 1)]]
         self.cameray = 0 #Used to move the view with the character as it jumps. Everything moves up by value of cameray.
         self.jump = 0 #Upwards speed
