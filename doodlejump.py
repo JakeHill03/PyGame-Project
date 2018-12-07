@@ -9,10 +9,10 @@ green = (0, 200, 0)
 blue = (0, 0, 200)
 FPS = 60
 
-power_up_boost = -40
-power_up_spawn_freq = 7
+#power_up_boost = -40
+#power_up_spawn_freq = 7
 
-enemy_freq = 5000
+#enemy_freq = 5000
 hs_file = "highscore.txt"
 Font_Name="scoreboard"
 
@@ -50,7 +50,7 @@ class DoodleJump:
         self.font = pygame.font.SysFont("Arial", 25) #initialises the font to default to Arial size 25
         self.font_name=pygame.font.match_font(Font_Name)
         self.clock = pygame.time.Clock()
-        self.gameOver = False
+        #self.gameOver = False
     
         self.playerwidth = self.playerstat.get_width()
         self.playerheight = self.playerstat.get_height()
@@ -73,7 +73,7 @@ class DoodleJump:
         self.jump = 0 #Upwards speed
         self.gravity = 0 #Downwards speed
         self.xmovement = 0 # x direction speed - -ve is left, +ve is right, 0 is stationary
-        self.gameExit = False
+        #self.gameExit = False
         
        
     def updatePlayer(self):
@@ -192,7 +192,7 @@ class DoodleJump:
             player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight)
             
             if rect.colliderect(player):
-                self.gameOver = True
+                #self.gameOver = True
                 self.gameOverScreen()
                     
     def drawEnemies(self):
@@ -313,7 +313,7 @@ class DoodleJump:
             if e.type == pygame.QUIT:
                 pygame.quit()
 
-            if self.playery - self.cameray > 700: #Restarts when character falls off view
+            if self.playery - self.cameray > self.height: #Restarts when character falls off view
                 self.cameray = 0
                 self.platforms = [[400, 500, 0, 0]]
                 self.generatePlatforms()
@@ -367,11 +367,11 @@ class DoodleJump:
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
                     waiting=False
-                    self.gameExit=True
+                    #self.gameExit=True
                 if event.type==pygame.KEYUP:
                     waiting=False
-                    self.gameOver=False
-                    self.gameExit=False
+                    #self.gameOver=False
+                    #self.gameExit=False
 
-#"""NEW UP TO HERE"""  
+
 DoodleJump().startScreen()
