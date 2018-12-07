@@ -318,7 +318,7 @@ class DoodleJump:
                 self.platforms = [[400, 500, 0, 0]]
                 self.generatePlatforms()
                 self.playerx = self.width/2
-                self.playery = self.width/
+                self.playery = self.width/2
                 self.gameOver = True
                 self.gameOverScreen()
             self.drawBackground()
@@ -354,9 +354,9 @@ class DoodleJump:
 
     def gameOverScreen(self):
         self.screen.fill(pygame.Color("light blue"))
-        self.messageToScreen("OOPS!...GAME-OVER", 40, white, self.width / 2 -50, 180)
-        self.messageToScreen("Score : "+(str)(self.score), 40, white, self.width / 2, self.height / 2-100)
-        self.messageToScreen("Press any key to play again...", 30, white, self.width / 2 + 50, self.height / 2 + 50)
+        self.messageToScreen("OOPS!...GAME-OVER", 40, white, self.width / 2, self.height / 4)
+        self.messageToScreen("Score : "+(str)(self.score), 40, white, self.width / 2, self.height / 2)
+        self.messageToScreen("Press any key to play again...", 30, white, self.width / 2, self.height / 3*4)
         pygame.display.update()
         self.waitForKeyPress()
         DoodleJump().__init__()
