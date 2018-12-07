@@ -318,7 +318,9 @@ class DoodleJump:
                 self.platforms = [[400, 500, 0, 0]]
                 self.generatePlatforms()
                 self.playerx = self.width/2
-                self.playery = self.width/3
+                self.playery = self.width/
+                self.gameOver = True
+                self.gameOverScreen()
             self.drawBackground()
             self.drawPlatforms()
             self.drawBoosts()
