@@ -62,6 +62,7 @@ class DoodleJump:
         self.flyheight = self.fly.get_height()
         
         
+        self.load_data()
         self.score = 0        
         self.direction = 0 #direction - 0 for right, 1 for left
         self.playerx = self.width/2 #left-most coordinate of player
@@ -75,6 +76,14 @@ class DoodleJump:
         self.xmovement = 0 # x direction speed - -ve is left, +ve is right, 0 is stationary
         #self.gameExit = False
         
+    def load_data(self):
+        # loading the high score from the file
+        self.dir = path.dirname(__file__)
+        with open(path.join(self.dir, hs_file), 'r+') as f:
+            try:
+                self.highscore = int(f.read())
+            except:
+                self.highscore = 0
        
     def updatePlayer(self):
         if not self.jump:               #if jump is 0   
@@ -346,7 +355,7 @@ class DoodleJump:
         self.messageToScreen("Next Hop!",75,white,self.width/2, self.height/ (3*4))
         self.messageToScreen("Use the arrow keys to move", 35, white, self.width / 2, self.height / 2)
         self.messageToScreen("Press any key to continue...", 25, white, self.width / 2, self.height / 4)
-        #self.messageToScreen("High Score: " + str(self.highscore), 25, white, self.width / 2, 35)
+        self.messageToScreen("High Score: " + str(self.highscore), 25, white, self.width / 2, 35)
         pygame.display.update()
         self.waitForKeyPress()
         DoodleJump().run()
@@ -357,6 +366,15 @@ class DoodleJump:
         self.messageToScreen("OOPS!...GAME-OVER", 40, white, self.width / 2, self.height / (3*4))
         self.messageToScreen("Score : "+(str)(self.score), 40, white, self.width / 2, self.height / 2)
         self.messageToScreen("Press any key to play again...", 30, white, self.width / 2, self.height / 4)
+        
+        if self.score > self.highscore:
+            self.highscore = self.score
+            self.messageToScreen("CONGRATULATIONS!!!  NEW HIGH SCORE!", 30, white, self.width / 2, self.height / 2 - 30)
+            with open(path.join(self.dir, hs_file), 'w') as f:                      # writing the new highscore in the file
+                f.write(str(self.score))
+        else:
+                self.messageToScreen("High Score: " + str(self.highscore), 30, white, self.width / 2, self.height / 2 - 30)
+        
         pygame.display.update()
         self.waitForKeyPress()
         DoodleJump().__init__()
