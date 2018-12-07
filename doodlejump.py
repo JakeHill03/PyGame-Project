@@ -208,8 +208,19 @@ class DoodleJump:
                 self.enemies.append([random.randint(0, 700), self.enemies[-1][1] - 800, enemytype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
                 self.enemies.pop(0)           #removes the 0th entry in platforms
                 
-                self.score += 100       
-            
+                self.score += 100      
+                
+            if e[-1] == 1:      #Changes direction when gets to edge
+                e[0] += 5
+                if e[0] > self.width-self.platformwidth:
+                    e[-1] = 0
+            else:
+                e[0] -= 5
+                if e[0] <= 0:
+                    e[-1] = 1
+                    
+                    
+                    
             #COPIES THE PLATFORM IMAGE TO SCREEN
             if e[2] == 0:
                 self.screen.blit(self.bird, (e[0], e[1] - self.cameray))
