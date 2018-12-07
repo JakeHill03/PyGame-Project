@@ -50,7 +50,7 @@ class DoodleJump:
         self.font = pygame.font.SysFont("Arial", 25) #initialises the font to default to Arial size 25
         self.font_name=pygame.font.match_font(Font_Name)
         self.clock = pygame.time.Clock()
-        #self.gameOver = False
+
     
         self.playerwidth = self.playerstat.get_width()
         self.playerheight = self.playerstat.get_height()
@@ -74,7 +74,7 @@ class DoodleJump:
         self.jump = 0 #Upwards speed
         self.gravity = 0 #Downwards speed
         self.xmovement = 0 # x direction speed - -ve is left, +ve is right, 0 is stationary
-        #self.gameExit = False
+
         
     def load_data(self):
         # loading the high score from the file
@@ -136,7 +136,7 @@ class DoodleJump:
             else:
                 self.screen.blit(self.playerstat, (self.playerx, self.playery - self.cameray))
 
-#"""NEW UP TO HERE"""      
+   
     def updateBoosts(self):
         for b in self.boosts:
             rect = pygame.Rect(b[0], b[1], self.flywidth, self.flyheight)
@@ -172,7 +172,7 @@ class DoodleJump:
                 self.boosts.append([random.randint(0, 700), self.boosts[-1][1] - 1000, boosttype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
                 self.boosts.pop(0)           #removes the 0th entry in boosts
                 
-                #self.score += 100       
+     
             
             #COPIES THE PLATFORM IMAGE TO SCREEN
             if b[2] == 0:
@@ -193,7 +193,7 @@ class DoodleJump:
                 boosttype = 2
             self.boosts.append([x, on, boosttype, 0])
             on -= 50
-#"""NEW UP TO HERE"""
+
             
     def updateEnemies(self):
         for e in self.enemies:
@@ -201,7 +201,6 @@ class DoodleJump:
             player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight)
             
             if rect.colliderect(player):
-                #self.gameOver = True
                 self.gameOverScreen()
                     
     def drawEnemies(self):
@@ -328,7 +327,6 @@ class DoodleJump:
                 self.generatePlatforms()
                 self.playerx = self.width/2
                 self.playery = self.width/2
-                self.gameOver = True
                 self.gameOverScreen()
             self.drawBackground()
             self.drawPlatforms()
@@ -341,7 +339,7 @@ class DoodleJump:
             self.screen.blit(self.font.render(str(self.score), -1, (0, 0, 0)), (25, 25))
             pygame.display.flip() 
             
-#"NEW FROM HERE"""         
+       
     def messageToScreen(self,msg,size, color, x, y):
         font=pygame.font.Font(self.font_name,size)
         text_surface=font.render(msg,True,color)
@@ -386,12 +384,10 @@ class DoodleJump:
             self.clock.tick(FPS)
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
-                    waiting=False
-                    #self.gameExit=True
+                    pygame.quit()
                 if event.type==pygame.KEYUP:
                     waiting=False
-                    #self.gameOver=False
-                    #self.gameExit=False
+
 
 
 DoodleJump().startScreen()
