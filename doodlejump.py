@@ -2,7 +2,7 @@ import pygame
 import random
 from os import path
 
-
+#//LOUISE FROM HERE//
 white = (255, 255, 255) #declare colour variables 
 black = (0, 0, 0)
 green = (0, 200, 0)
@@ -136,6 +136,7 @@ class DoodleJump:
             else:
                 self.screen.blit(self.playerstat, (self.playerx, self.playery - self.cameray))
 
+
    
     def updateBoosts(self):
         for b in self.boosts:
@@ -194,7 +195,7 @@ class DoodleJump:
             self.boosts.append([x, on, boosttype, 0])
             on -= 50
 
-            
+#//SECTION 1 END JAKE FROM HERE//            
     def updateEnemies(self):
         for e in self.enemies:
             rect = pygame.Rect(e[0], e[1], self.birdwidth, self.birdheight)
@@ -304,7 +305,7 @@ class DoodleJump:
                 platformtype = 2
             self.platforms.append([x, on, platformtype, 0])
             on -= 50
-
+#//SECTION 2 END STEPHEN FROM HERE//
     def drawBackground(self):
         self.screen.fill(pygame.Color("light blue"))       
        
