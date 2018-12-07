@@ -9,16 +9,12 @@ green = (0, 200, 0)
 blue = (0, 0, 200)
 FPS = 60
 
-#power_up_boost = -40
-#power_up_spawn_freq = 7
 
-#enemy_freq = 5000
 hs_file = "highscore.txt"
 Font_Name="scoreboard"
 
 pygame.mixer.pre_init(44100,16,2,4096) #initialises the pygame mixer module for loading and playing sound files and music
 pygame.init() #initialises the pygame module
-
 
 image_dir = path.join(path.dirname(__file__), 'images') #Adds a path to use the images folder, so files can be referenced
 sound_dir = path.join(path.dirname(__file__), 'sound') #Adds path to use sound folder 
@@ -28,9 +24,12 @@ pygame.mixer.music.load("background_music.wav")
 falling_noise = pygame.mixer.Sound("falling_sound.wav")
 jumping_noise = pygame.mixer.Sound("jump_sound.wav")
 powerup_noise = pygame.mixer.Sound("powerup.wav")
+
  #set volume and playback for music   
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
+
+
 class DoodleJump:
     def __init__(self):
         
@@ -50,7 +49,6 @@ class DoodleJump:
         self.font = pygame.font.SysFont("Arial", 25) #initialises the font to default to Arial size 25
         self.font_name=pygame.font.match_font(Font_Name)
         self.clock = pygame.time.Clock()
-        #self.gameOver = False
     
         self.playerwidth = self.playerstat.get_width()
         self.playerheight = self.playerstat.get_height()
@@ -60,7 +58,6 @@ class DoodleJump:
         self.birdheight = self.bird.get_height()
         self.flywidth = self.fly.get_width()
         self.flyheight = self.fly.get_height()
-        
         
         self.score = 0        
         self.direction = 0 #direction - 0 for right, 1 for left
@@ -73,14 +70,12 @@ class DoodleJump:
         self.jump = 0 #Upwards speed
         self.gravity = 0 #Downwards speed
         self.xmovement = 0 # x direction speed - -ve is left, +ve is right, 0 is stationary
-        #self.gameExit = False
-        
+
        
     def updatePlayer(self):
         if not self.jump:               #if jump is 0   
             self.playery += self.gravity #Player moves down by gravity value (gravity increases until collision)
             self.gravity += 1
-            
             
         elif self.jump:                 #if jump isn't 0
             self.playery -= self.jump   #Player moves up by jump value (jump will decrease to 0)
@@ -127,7 +122,7 @@ class DoodleJump:
             else:
                 self.screen.blit(self.playerstat, (self.playerx, self.playery - self.cameray))
 
-#"""NEW UP TO HERE"""      
+   
     def updateBoosts(self):
         for b in self.boosts:
             rect = pygame.Rect(b[0], b[1], self.flywidth, self.flyheight)
@@ -162,8 +157,6 @@ class DoodleJump:
                 
                 self.boosts.append([random.randint(0, 700), self.boosts[-1][1] - 1000, boosttype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
                 self.boosts.pop(0)           #removes the 0th entry in boosts
-                
-                #self.score += 100       
             
             #COPIES THE PLATFORM IMAGE TO SCREEN
             if b[2] == 0:
@@ -184,7 +177,7 @@ class DoodleJump:
                 boosttype = 2
             self.boosts.append([x, on, boosttype, 0])
             on -= 50
-#"""NEW UP TO HERE"""
+
             
     def updateEnemies(self):
         for e in self.enemies:
@@ -192,7 +185,6 @@ class DoodleJump:
             player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight)
             
             if rect.colliderect(player):
-                #self.gameOver = True
                 self.gameOverScreen()
                     
     def drawEnemies(self):
@@ -218,8 +210,6 @@ class DoodleJump:
                 e[0] -= 5
                 if e[0] <= 0:
                     e[-1] = 1
-                    
-                    
                     
             #COPIES THE PLATFORM IMAGE TO SCREEN
             if e[2] == 0:
@@ -319,7 +309,6 @@ class DoodleJump:
                 self.generatePlatforms()
                 self.playerx = self.width/2
                 self.playery = self.width/2
-                self.gameOver = True
                 self.gameOverScreen()
             self.drawBackground()
             self.drawPlatforms()
@@ -369,11 +358,9 @@ class DoodleJump:
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
                     waiting=False
-                    #self.gameExit=True
                 if event.type==pygame.KEYUP:
                     waiting=False
-                    #self.gameOver=False
-                    #self.gameExit=False
+
 
 
 DoodleJump().startScreen()
