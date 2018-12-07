@@ -307,28 +307,33 @@ class DoodleJump:
             on -= 50
 #//SECTION 2 END STEPHEN FROM HERE//
     def drawBackground(self):
-        self.screen.fill(pygame.Color("light blue"))       
+        self.screen.fill(pygame.Color("light blue")) # Makes screen background light blue
        
     
     def run(self): #take that out and make into game loop
         
-        clock = pygame.time.Clock()
+        clock = pygame.time.Clock() #creates a variable clock which is updated to track time
         self.generatePlatforms()
         
-        pygame.mixer.music.play(loops=-1)
+        pygame.mixer.music.play(loops=-1) # plays and loops background music when run method called
+        
         while True:
-            clock.tick(60)
-            e = pygame.event.poll()
+            clock.tick(FPS) #updates clock while game is running
+            
+            e = pygame.event.poll() 
             if e.type == pygame.QUIT:
-                pygame.quit()
+                pygame.quit() # gets single event from queue, if event is user quitting the game window then game quits
 
-            if self.playery - self.cameray > self.height: #Restarts when character falls off view
-                self.cameray = 0
+            if self.playery - self.cameray > self.height: #Restarts game when character falls off view
+                # resets position of objects on screen
+                self.cameray = 0  
                 self.platforms = [[400, 500, 0, 0]]
                 self.generatePlatforms()
                 self.playerx = self.width/2
                 self.playery = self.width/2
-                self.gameOverScreen()
+                self.gameOverScreen() #displays game over screen if player dies
+            
+            #draws and updates the objects onto the screen
             self.drawBackground()
             self.drawPlatforms()
             self.drawBoosts()
@@ -340,21 +345,22 @@ class DoodleJump:
             self.screen.blit(self.font.render(str(self.score), -1, (0, 0, 0)), (25, 25))
             pygame.display.flip() 
             
-       
-    def messageToScreen(self,msg,size, color, x, y):
-        font=pygame.font.Font(self.font_name,size)
-        text_surface=font.render(msg,True,color)
+    #gets the text message, font, colour and size and displays on screen    
+    def messageToScreen(self, msg, size, colour, x, y):
+        font = pygame.font.Font(self.font_name,size)
+        text_surface = font.render(msg, True, colour)
         text_rect=text_surface.get_rect()
-        text_rect.midtop=(x,y)
+        text_rect.midtop = (x,y)
         self.screen.blit(text_surface,text_rect)
     
     
+    #creates a start screen and waits until key is pressed before running the game 
     def startScreen(self):
         self.drawBackground()
         self.messageToScreen("Next Hop!",75,white,self.width/2, self.height/ (3*4))
         self.messageToScreen("Use the arrow keys to move", 35, white, self.width / 2, self.height / 2)
         self.messageToScreen("Press any key to continue...", 25, white, self.width / 2, self.height / 4)
-        self.messageToScreen("High Score: " + str(self.highscore), 25, white, self.width / 2, 35)
+        self.messageToScreen("High Score: " + str(self.highscore), 25, white, self.width / 2, 35) #updates current highscore and displays on start screen
         pygame.display.update()
         self.waitForKeyPress()
         DoodleJump().run()
@@ -363,13 +369,15 @@ class DoodleJump:
     def gameOverScreen(self):
         self.drawBackground()
         self.messageToScreen("OOPS!...GAME-OVER", 40, white, self.width / 2, self.height / (3*4))
-        self.messageToScreen("Score : "+(str)(self.score), 40, white, self.width / 2, self.height / 2)
+        self.messageToScreen("Score : "+(str)(self.score), 40, white, self.width / 2, self.height / 2) #displays score
         self.messageToScreen("Press any key to play again...", 30, white, self.width / 2, self.height / 4)
         
+        #if the new score is greater than the previous highscore stored in the highscore file then that score 
+        #becomes new highscore and the highscore stored in the highscore file is overwritten
         if self.score > self.highscore:
             self.highscore = self.score
             self.messageToScreen("CONGRATULATIONS!!!  NEW HIGH SCORE!", 30, white, self.width / 2, self.height / 2 - 30)
-            with open(path.join(self.dir, hs_file), 'w') as f:                      # writing the new highscore in the file
+            with open(path.join(self.dir, hs_file), 'w') as f: # writing the new highscore to the file
                 f.write(str(self.score))
         else:
                 self.messageToScreen("High Score: " + str(self.highscore), 30, white, self.width / 2, self.height / 2 - 30)
@@ -379,6 +387,7 @@ class DoodleJump:
         DoodleJump().__init__()
         DoodleJump().run()
    
+    #function waits until a key is pressed before next action is executed such as updating the screen
     def waitForKeyPress(self):
         waiting=True
         while waiting:
@@ -390,5 +399,5 @@ class DoodleJump:
                     waiting=False
 
 
-
+#displays start screen when code file is run
 DoodleJump().startScreen()
