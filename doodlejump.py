@@ -343,9 +343,9 @@ class DoodleJump:
     
     def startScreen(self):
         self.drawBackground()
-        self.messageToScreen("Next Hop!",75,white,self.width/2 -50,self.height/2 -50)
-        self.messageToScreen("Use the arrow keys to move", 35, white, self.width / 2 + 45, self.height / 2 + 45)
-        self.messageToScreen("Press any key to continue...", 25, white, self.width / 2 + 80, self.height / 2 + 80)
+        self.messageToScreen("Next Hop!",75,white,self.width/2, self.height/ (3*4))
+        self.messageToScreen("Use the arrow keys to move", 35, white, self.width / 2, self.height / 2)
+        self.messageToScreen("Press any key to continue...", 25, white, self.width / 2, self.height / 4)
         #self.messageToScreen("High Score: " + str(self.highscore), 25, white, self.width / 2, 35)
         pygame.display.update()
         self.waitForKeyPress()
@@ -354,9 +354,9 @@ class DoodleJump:
 
     def gameOverScreen(self):
         self.drawBackground()
-        self.messageToScreen("OOPS!...GAME-OVER", 40, white, self.width / 2, self.height / 4)
+        self.messageToScreen("OOPS!...GAME-OVER", 40, white, self.width / 2, self.height / (3*4))
         self.messageToScreen("Score : "+(str)(self.score), 40, white, self.width / 2, self.height / 2)
-        self.messageToScreen("Press any key to play again...", 30, white, self.width / 2, self.height / (3*4))
+        self.messageToScreen("Press any key to play again...", 30, white, self.width / 2, self.height / 4)
         pygame.display.update()
         self.waitForKeyPress()
         DoodleJump().__init__()
