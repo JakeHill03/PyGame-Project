@@ -163,18 +163,18 @@ class DoodleJump:
 #//SECTION 1 END JAKE FROM HERE//            
     def updateEnemies(self):
         for e in self.enemies:
-            rect = pygame.Rect(e[0], e[1], self.birdwidth, self.birdheight)
-            player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight)
+            rect = pygame.Rect(e[0], e[1], self.birdwidth, self.birdheight) #creates a rectangle using the pygame function. References back to the top level of the class.
+            player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight)#creates a rectangle for the player.
             
-            if rect.colliderect(player):
+            if rect.colliderect(player): #if the player hits an enemy game over.
                 self.gameOverScreen()
 
-            if e[-1] == 1: 
+            if e[-1] == 1:  #If the enemy direction is left move left. If it hits the edge then move right.
                 e[0] -= 2
                 if e[0] <= 0: 
                     e[-1] = 0
             else:
-                e[0] += 2
+                e[0] += 2 #Start by moving right if it hits the edge then move left.
                 if e[0] >= self.width-self.birdwidth:
                     e[-1] = 1
                 
