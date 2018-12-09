@@ -1,83 +1,81 @@
+#Import necessary packages
 import pygame
 import random
 from os import path
 
-#//LOUISE FROM HERE//
-white = (255, 255, 255) #declare colour variables 
+#Declare colour variables
+white = (255, 255, 255)
 black = (0, 0, 0)
 green = (0, 200, 0)
 blue = (0, 0, 200)
 FPS = 60
 
-#power_up_boost = -40
-#power_up_spawn_freq = 7
+pygame.init() #Initialise pygame module
+image_dir = path.join(path.dirname(__file__), 'images') #Add path to use the images folder, so files can be referenced
+sound_dir = path.join(path.dirname(__file__), 'sound') #Add path to use sound folder 
 
-#enemy_freq = 5000
-hs_file = "highscore.txt"
-Font_Name="scoreboard"
-
-pygame.mixer.pre_init(44100,16,2,4096) #initialises the pygame mixer module for loading and playing sound files and music
-pygame.init() #initialises the pygame module
-
-
-image_dir = path.join(path.dirname(__file__), 'images') #Adds a path to use the images folder, so files can be referenced
-sound_dir = path.join(path.dirname(__file__), 'sound') #Adds path to use sound folder 
-
-# load in sounds
+#Load in sounds
 pygame.mixer.music.load("background_music.wav")
 falling_noise = pygame.mixer.Sound("falling_sound.wav")
 jumping_noise = pygame.mixer.Sound("jump_sound.wav")
 powerup_noise = pygame.mixer.Sound("powerup.wav")
- #set volume and playback for music   
-pygame.mixer.music.set_volume(0.5)
-pygame.mixer.music.play(-1)
+pygame.mixer.pre_init(44100,16,2,4096) #initialises the pygame mixer module for loading and playing sound files and music
+pygame.mixer.music.set_volume(0.5) #Set music volume
+pygame.mixer.music.play(-1) #Play music
+
+#Declare scoreboard variables
+hs_file = "highscore.txt"
+Font_Name="scoreboard"
+
 class DoodleJump:
     def __init__(self):
         
-        self.width=800
-        self.height=600
+        self.width=800 #Set game width
+        self.height=600 #Set game height
 
         self.screen = pygame.display.set_mode((self.width, self.height)) #Initialize window
-        self.green = pygame.image.load("images/sprite_images/lily_pad_sprite.png").convert_alpha() #Loads image and converts it to the same pixel format as used by the screen so that it isn't converted everytime it's copied (optimizes performance). Also makes it transparent?
-        self.blue = pygame.image.load("images/sprite_images/lily_pad_sprite.png").convert_alpha()
-        self.playerstat = pygame.image.load("images/sprite_images/frog_sit_sprite.png").convert_alpha() #different images used for jumping/falling
+        pygame.display.set_caption("Next Hop!") #Set game window caption
+        
+        #Load images and convert them to the same pixel format as used by the screen.(optimizes performance)
+        self.lily = pygame.image.load("images/sprite_images/lily_pad_sprite.png").convert_alpha() 
+        self.playerstat = pygame.image.load("images/sprite_images/frog_sit_sprite.png").convert_alpha() 
         self.playerRight = pygame.image.load("images/sprite_images/jump_right.png").convert_alpha()
         self.playerLeft = pygame.image.load("images/sprite_images/jump_left.png").convert_alpha()
         self.fly = pygame.image.load("images/sprite_images/fly_sprite.png").convert_alpha()
         self.bird = pygame.image.load("images/sprite_images/bird_2.png").convert_alpha()
-        pygame.font.init() #Initialize pygame font module
-        pygame.display.set_caption("Next Hop!")
-        self.font = pygame.font.SysFont("Arial", 25) #initialises the font to default to Arial size 25
-        self.font_name=pygame.font.match_font(Font_Name)
-        self.clock = pygame.time.Clock()
-
-    
+        
+        #Set objects widths and heights
         self.playerwidth = self.playerstat.get_width()
         self.playerheight = self.playerstat.get_height()
-        self.platformwidth = self.green.get_width()
-        self.platformheight = self.green.get_height()
+        self.platformwidth = self.lily.get_width()
+        self.platformheight = self.lily.get_height()
         self.birdwidth = self.bird.get_width()
         self.birdheight = self.bird.get_height()
         self.flywidth = self.fly.get_width()
-        self.flyheight = self.fly.get_height()
+        self.flyheight = self.fly.get_height()    
         
+        pygame.font.init() #Initialize pygame font module
+        self.font = pygame.font.SysFont("Arial", 25) #Declares the default font as Arial size 25
+        self.font_name=pygame.font.match_font(Font_Name)
         
-        self.load_data()
-        self.score = 0        
-        self.direction = 0 #direction - 0 for right, 1 for left
-        self.playerx = self.width/2 #left-most coordinate of player
-        self.playery = self.height/3 #top-most coordinate of player
-        self.platforms = [[400, 500, 0, random.randint(0, 1)]] #left and top coordinates of the platform, platform type, direction platform moves initially
+        self.clock = pygame.time.Clock() #Count time
+    
+        self.load_data() #Load previous high score   
+        self.score = 0   #Set current highscore to zero
+        
+        self.direction = 0 #Direction of player - 0 for right, 1 for left
+        self.playerx = self.width/2 #Left-most coordinate of player
+        self.playery = self.height/3 #Top-most coordinate of player
+        self.platforms = [[400, 500, 0, random.randint(0, 1)]] #Left and top coordinates of the lilypad platform, platform type, direction platform moves initially
         self.boosts = [[200, 300, random.randint(0, 1)]]
         self.enemies = [[200, 100, random.randint(0, 1)]]
         self.cameray = 0 #Used to move the view with the character as it jumps. Everything moves up by value of cameray.
         self.jump = 0 #Upwards speed
         self.gravity = 0 #Downwards speed
-        self.xmovement = 0 # x direction speed - -ve is left, +ve is right, 0 is stationary
+        self.xmovement = 0 #X-direction speed - -ve is left, +ve is right, 0 is stationary
 
-        
     def load_data(self):
-        # loading the high score from the file
+        #Load previous high score from file
         self.dir = path.dirname(__file__)
         with open(path.join(self.dir, hs_file), 'r+') as f:
             try:
@@ -86,115 +84,82 @@ class DoodleJump:
                 self.highscore = 0
        
     def updatePlayer(self):
-        if not self.jump:               #if jump is 0   
-            self.playery += self.gravity #Player moves down by gravity value (gravity increases until collision)
-            self.gravity += 1
-            
-            
-        elif self.jump:                 #if jump isn't 0
-            self.playery -= self.jump   #Player moves up by jump value (jump will decrease to 0)
-            self.jump -= 1          
+        if not self.jump:                   #If player is not jumping (jump=0) 
+            self.playery += self.gravity    #Player moves down by gravity value
+            self.gravity += 1               #Gravity increases until collision
         
-        key = pygame.key.get_pressed()  #returns boolean values representing state of every key
+        elif self.jump:                 #If player is jumping
+            self.playery -= self.jump   #Player moves up by jump value
+            self.jump -= 1              #Jump decreases to zero
+        
+        key = pygame.key.get_pressed()  #Return boolean values representing state of every key
         
         if key[pygame.K_RIGHT]:         #If the right key's pressed
             if self.xmovement < 10:
                 self.xmovement += 1     #Increase speed to the right within limit
-            self.direction = 0
+            self.direction = 0          #Set character direction to right so corresponding image is used
+            
         elif key[pygame.K_LEFT]:        #If the left key's pressed 
             if self.xmovement > -10:
                 self.xmovement -= 1     #Increase speed to the left within limit
-            self.direction = 1          
-        else:                           #slow character down (x direction only)
+            self.direction = 1          #Set character direction to left so corresponding image is used
+            
+        else:                           #If no key's pressed, slow character down (in X-direction)
             if self.xmovement > 0:
                 self.xmovement -= 1
             elif self.xmovement < 0:
                 self.xmovement += 1
                 
-        if self.playerx > self.width:   #If character goes over the edge of the screen 
-            self.playerx = 0            #Move character to the otherside
-        elif self.playerx < 0: 
-            self.playerx = self.width
+        if self.playerx > self.width:   #If character goes over the right edge of screen 
+            self.playerx = 0            #Move character to the left edge
+        elif self.playerx < 0:          #If character goes over left edge of screen
+            self.playerx = self.width   #Move character to the right edge
             
-        self.playerx += self.xmovement #Execute character movement
+        self.playerx += self.xmovement #Execute character movement (in X-direction)
         
-        if self.playery - self.cameray <= 200:
+        if self.playery - self.cameray <= 200: #Defines the window view relative to the character. This value is distance between window and character allowed.
             if self.jump >15 :
-                self.cameray -= 30   #Defines the window view relative to the character. This value is distance between window and character allowed.
+                self.cameray -= 30   #Increment in which window moves. Must be larger when character moves faster.
             else:
-                self.cameray -= 10   #increment of window moving upward (smaller = smoother, larger= moves up in stages)
+                self.cameray -= 10   
             
-        #COPIES THE CHARACTER IMAGE TO THE SCREEN
-        if not self.direction:  
-            if self.jump:       
+        #Copy character image to screen
+        if self.jump:
+            if not self.direction:
                 self.screen.blit(self.playerRight, (self.playerx, self.playery - self.cameray))
             else:
-                self.screen.blit(self.playerstat, (self.playerx, self.playery - self.cameray))
-        else:
-            if self.jump:
                 self.screen.blit(self.playerLeft, (self.playerx, self.playery - self.cameray))
-            else:
+        else:
                 self.screen.blit(self.playerstat, (self.playerx, self.playery - self.cameray))
+            
 
-
-   
     def updateBoosts(self):
         for b in self.boosts:
             rect = pygame.Rect(b[0], b[1], self.flywidth, self.flyheight)
             player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight)
             
-            if rect.colliderect(player):
-                if b[2] != 2: 
-                    powerup_noise.play()
-                    self.jump = 40 #sets new jump height/range to 80 if collision with boost detected
-                    self.gravity = 0 #and new gravity to 0 so the object (player) moves upwards
+            if rect.colliderect(player):    #If the player and boost collide
+                powerup_noise.play()        #Play power up sound      
+                self.jump = 40          #Set jump (upwards speed) to 40
+                self.gravity = 0        #Set gravity to 0 so the player moves upwards
                     
-            if b[2] == 1:
-                if b[-1] == 1:
-                    b[0] += 5
-                    if b[0] > self.width - self.flywidth:
-                        b[-1] = 1
-                        
-                else:
-                    b[0] -= 5
-                    if b[0] <= 0:
-                        b[-1] = 1
-                        
-    def drawBoosts(self):
-        for b in self.boosts:
-            check = self.boosts[-1][1] - self.cameray
-            if check > self.height:
-                boosttype = random.randint(0, 1000) #declares a random spawning position between 0 and 1000
-                if boosttype < 800: #if the position of the spawn is less than 800 then the boost spawns in from the left to right
-                    boosttype = 0
-                else:
-                    boosttype = 1 #else the postion of the spawn is greater than the width of the window and so the boost spawns in from right to left 
-                
-                self.boosts.append([random.randint(0, 700), self.boosts[-1][1] - 1000, boosttype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
-                self.boosts.pop(0)           #removes the 0th entry in boosts
-                
-     
-            
-            #COPIES THE PLATFORM IMAGE TO SCREEN
-            if b[2] == 0:
-                self.screen.blit(self.fly, (b[0], b[1] - self.cameray))
-            elif b[2] == 1:
-                self.screen.blit(self.fly, (b[0], b[1] - self.cameray))
-                
-    def generateBoosts(self):
-        on = 600
-        while on > -100:
-            x = random.randint(0,700)
-            boosttype = random.randint(0, 1000)
-            if boosttype < 800:
-                boosttype = 0
-            elif boosttype < 900:
-                boosttype = 1
+            if b[-1] == 1:      #If boost direction is left
+                b[0] -= 5       #Move boost left
+                if b[0] <= 0:   #If boost reaches the window's left edge
+                    b[-1] = 0   #Change boost direction
             else:
-                boosttype = 2
-            self.boosts.append([x, on, boosttype, 0])
-            on -= 50
-
+                b[0] += 5       #Move boost right
+                if b[0] >= self.width-self.flywidth: #If boost reaches the window's right edge
+                    b[-1] = 1   #Change boost direction
+                        
+    def drawBoosts(self): 
+        for b in self.boosts:
+            check = self.boosts[0][1] - self.cameray 
+            if check > self.height:          #If last boost is out of view
+                self.boosts.append([random.randint(0, 700), self.boosts[-1][1] - 1000, random.randint(0, 1)]) #Adds new boost below previous one (space between is value 1000)
+                self.boosts.pop(0)           #removes the 0th entry in boosts
+            self.screen.blit(self.fly, (b[0], b[1] - self.cameray)) #Copy boost image to screen
+           
 #//SECTION 1 END JAKE FROM HERE//            
     def updateEnemies(self):
         for e in self.enemies:
@@ -203,54 +168,25 @@ class DoodleJump:
             
             if rect.colliderect(player):
                 self.gameOverScreen()
-                    
+
+            if e[-1] == 1: 
+                e[0] -= 2
+                if e[0] <= 0: 
+                    e[-1] = 0
+            else:
+                e[0] += 2
+                if e[0] >= self.width-self.birdwidth:
+                    e[-1] = 1
+                
     def drawEnemies(self):
         for e in self.enemies:
             check = self.enemies[0][1] - self.cameray #If the last platform is out of view
             if check > self.height:                     #Define new platform
-                enemytype = random.randint(0, 1000)
-                if enemytype < 800:
-                    enemytype = 0
-                else:
-                    enemytype = 1
-
-                self.enemies.append([random.randint(0, 700), self.enemies[-1][1] - 800, enemytype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
+                self.enemies.append([random.randint(0, 700), self.enemies[-1][1] - 800, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
                 self.enemies.pop(0)           #removes the 0th entry in platforms
+            self.screen.blit(self.bird, (e[0], e[1] - self.cameray))
                 
-                self.score += 100      
-                
-            if e[-1] == 1:      #Changes direction when gets to edge
-                e[0] += 5
-                if e[0] > self.width-self.platformwidth:
-                    e[-1] = 0
-            else:
-                e[0] -= 5
-                if e[0] <= 0:
-                    e[-1] = 1
-                    
-                    
-                    
-            #COPIES THE PLATFORM IMAGE TO SCREEN
-            if e[2] == 0:
-                self.screen.blit(self.bird, (e[0], e[1] - self.cameray))
-            elif e[2] == 1:
-                self.screen.blit(self.bird, (e[0], e[1] - self.cameray))
-                
-    def generateEnemies(self):
-        on = 600
-        while on > -100:
-            x = random.randint(0,700)
-            enemytype = random.randint(0, 1000)
-            if enemytype < 800:
-                enemytype = 0
-            elif enemytype < 900:
-                enemytype = 1
-            else:
-                enemytype = 2
-            self.platforms.append([x, on, enemytype, 0])
-            on -= 50
-                
-                    
+            
     def updatePlatforms(self):
         for p in self.platforms:
             rect = pygame.Rect(p[0], p[1], self.platformwidth, self.platformheight) #rectangle (left,top,width,height) representing platform, uses picture dimensions
@@ -287,10 +223,8 @@ class DoodleJump:
                 self.score += 100       
             
             #COPIES THE PLATFORM IMAGE TO SCREEN
-            if p[2] == 0:
-                self.screen.blit(self.green, (p[0], p[1] - self.cameray))
-            elif p[2] == 1:
-                self.screen.blit(self.blue, (p[0], p[1] - self.cameray))
+            self.screen.blit(self.lily, (p[0], p[1] - self.cameray))
+
 
     def generatePlatforms(self):
         on = 600
