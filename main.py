@@ -160,13 +160,13 @@ class DoodleJump:
                 self.boosts.pop(0)           #removes the 0th entry in boosts
             self.screen.blit(self.fly, (b[0], b[1] - self.cameray)) #Copy boost image to screen
            
-#//SECTION 1 END JAKE FROM HERE//            
+           
     def updateEnemies(self):
         for e in self.enemies:
-            rect = pygame.Rect(e[0], e[1], self.birdwidth, self.birdheight) #creates a rectangle using the pygame function. References back to the top level of the class.
-            player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight)#creates a rectangle for the player.
+            rect = pygame.Rect(e[0], e[1], self.birdwidth, self.birdheight) #Creates a rectangle using the pygame function. References back to the top level of the class.
+            player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight)#Creates a rectangle for the player.
             
-            if rect.colliderect(player): #if the player hits an enemy game over.
+            if rect.colliderect(player): #If the player hits an enemy game over.
                 self.gameOverScreen()
 
             if e[-1] == 1:  #If the enemy direction is left move left. If it hits the edge then move right.
@@ -180,16 +180,16 @@ class DoodleJump:
                 
     def drawEnemies(self):
         for e in self.enemies:
-            check = self.enemies[0][1] - self.cameray #If the last platform is out of view
-            if check > self.height:                     #Define new platform
-                self.enemies.append([random.randint(0, 700), self.enemies[-1][1] - 800, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
-                self.enemies.pop(0)           #removes the 0th entry in platforms
+            check = self.enemies[0][1] - self.cameray   #If the last enemy bird is out of view
+            if check > self.height:                     #Define new bird
+                self.enemies.append([random.randint(0, 700), self.enemies[-1][1] - 800, random.randint(0, 1)]) #Adds new bird below previous one (space between is value 800)
+                self.enemies.pop(0)           #Removes the 0th entry in enemies
             self.screen.blit(self.bird, (e[0], e[1] - self.cameray))
                 
             
     def updatePlatforms(self):
         for p in self.platforms:
-            rect = pygame.Rect(p[0], p[1], self.platformwidth, self.platformheight) #rectangle (left,top,width,height) representing platform, uses picture dimensions
+            rect = pygame.Rect(p[0], p[1], self.platformwidth, self.platformheight) #Rectangle (left,top,width,height) representing lilypad platform, uses picture dimensions
             player = pygame.Rect(self.playerx, self.playery, self.playerwidth, self.playerheight) #Rectangle representing player
             
             if rect.colliderect(player) and self.gravity: #If the character falls into platform from above it
@@ -207,39 +207,35 @@ class DoodleJump:
                     if p[0] <= 0:
                         p[-1] = 1
 
-    def drawPlatforms(self): #platforms use stephens example
+    def drawPlatforms(self): #Draw lilpad platforms
         for p in self.platforms:
             check = self.platforms[0][1] - self.cameray #If the last platform is out of view
-            if check > self.height:                     #Define new platform
+            if check > self.height:                     #Define if new platform will be stationary or move
                 platformtype = random.randint(0, 1000)
                 if platformtype < 800:
                     platformtype = 0
                 else:
                     platformtype = 1
 
-                self.platforms.append([random.randint(0, 700), self.platforms[-1][1] - 80, platformtype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 50)
+                self.platforms.append([random.randint(0, 700), self.platforms[-1][1] - 80, platformtype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 80)
                 self.platforms.pop(0)           #removes the 0th entry in platforms
-                
-                self.score += 100       
-            
-            #COPIES THE PLATFORM IMAGE TO SCREEN
-            self.screen.blit(self.lily, (p[0], p[1] - self.cameray))
+                self.score += 100 #Add to player's score
+            self.screen.blit(self.lily, (p[0], p[1] - self.cameray)) #Copy lilpad image to screen
 
 
-    def generatePlatforms(self):
-        on = 600
+    def generatePlatforms(self): #Generate all platforms for beginning of game
+        on = self.height
         while on > -100:
-            x = random.randint(0,700)
             platformtype = random.randint(0, 1000)
             if platformtype < 800:
                 platformtype = 0
-            elif platformtype < 900:
-                platformtype = 1
             else:
-                platformtype = 2
-            self.platforms.append([x, on, platformtype, 0])
-            on -= 50
-#//SECTION 2 END STEPHEN FROM HERE//
+                platformtype = 1
+
+            self.platforms.append([random.randint(0,700), on, platformtype, random.randint(0, 1)])
+            on -= 80
+
+
     def drawBackground(self):
         self.screen.fill(pygame.Color("light blue")) # Makes screen background light blue
        
