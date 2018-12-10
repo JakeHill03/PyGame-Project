@@ -12,13 +12,13 @@ FPS = 60
 
 pygame.init() #Initialise pygame module
 image_dir = path.join(path.dirname(__file__), 'images') #Add path to use the images folder, so files can be referenced
-sound_dir = path.join(path.dirname(__file__), 'sound') #Add path to use sound folder 
+music_dir = path.join(path.dirname(__file__), 'music') #Add path to use sound folder 
 
 #Load in sounds
-pygame.mixer.music.load("music/background_music.wav")
-falling_noise = pygame.mixer.Sound("music/falling_sound.wav")
-jumping_noise = pygame.mixer.Sound("music/jump_sound.wav")
-powerup_noise = pygame.mixer.Sound("music/powerup.wav")
+pygame.mixer.music.load(path.join(music_dir, "background_music.wav"))
+falling_noise = pygame.mixer.Sound(path.join(music_dir, "falling_sound.wav"))
+jumping_noise = pygame.mixer.Sound(path.join(music_dir, "jump_sound.wav"))
+powerup_noise = pygame.mixer.Sound(path.join(music_dir, "powerup.wav"))
 pygame.mixer.pre_init(44100,16,2,4096) #initialises the pygame mixer module for loading and playing sound files and music
 pygame.mixer.music.set_volume(0.5) #Set music volume
 pygame.mixer.music.play(-1) #Play music
@@ -37,12 +37,12 @@ class DoodleJump:
         pygame.display.set_caption("Next Hop!") #Set game window caption
         
         #Load images and convert them to the same pixel format as used by the screen.(optimizes performance)
-        self.lily = pygame.image.load("images/lily_pad_sprite.png").convert_alpha() 
-        self.playerstat = pygame.image.load("images/frog_sit_sprite.png").convert_alpha() 
-        self.playerRight = pygame.image.load("images/jump_right.png").convert_alpha()
-        self.playerLeft = pygame.image.load("images/jump_left.png").convert_alpha()
-        self.fly = pygame.image.load("images/fly_sprite.png").convert_alpha()
-        self.bird = pygame.image.load("images/bird_2.png").convert_alpha()
+        self.lily = pygame.image.load(path.join(image_dir, "lily_pad_sprite.png")).convert_alpha() 
+        self.playerstat = pygame.image.load(path.join(image_dir, "frog_sit_sprite.png")).convert_alpha() 
+        self.playerRight = pygame.image.load(path.join(image_dir, "jump_right.png")).convert_alpha()
+        self.playerLeft = pygame.image.load(path.join(image_dir, "jump_left.png")).convert_alpha()
+        self.fly = pygame.image.load(path.join(image_dir, "fly_sprite.png")).convert_alpha()
+        self.bird = pygame.image.load(path.join(image_dir, "bird_2.png")).convert_alpha()
         
         #Set objects widths and heights
         self.playerwidth = self.playerstat.get_width()
