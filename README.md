@@ -1,6 +1,6 @@
 # PyGame-Project
 
-Hi, to instal this PyGame project 'Next Hop' you will need to clone this repository. 
+Hi, to install this PyGame project 'Next Hop' you will need to clone this repository. 
 
 You will also need a working python IDE, we used one through Anoconda for python 3.7 which can be obtained at this website
 https://www.anaconda.com/download/ You will also need to have the PyGame libary installed which can be found here https://www.pygame.org/news
