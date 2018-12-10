@@ -156,7 +156,7 @@ class DoodleJump:
         for b in self.boosts:
             check = self.boosts[0][1] - self.cameray 
             if check > self.height:          #If last boost is out of view
-                self.boosts.append([random.randint(0, 700), self.boosts[-1][1] - 1000, random.randint(0, 1)]) #Adds new boost below previous one (space between is value 1000)
+                self.boosts.append([random.randint(0, self.width-self.flywidth), self.boosts[-1][1] - 1000, random.randint(0, 1)]) #Adds new boost below previous one (space between is value 1000)
                 self.boosts.pop(0)           #removes the 0th entry in boosts
             self.screen.blit(self.fly, (b[0], b[1] - self.cameray)) #Copy boost image to screen
            
@@ -182,7 +182,7 @@ class DoodleJump:
         for e in self.enemies:
             check = self.enemies[0][1] - self.cameray   #If the last enemy bird is out of view
             if check > self.height:                     #Define new bird
-                self.enemies.append([random.randint(0, 700), self.enemies[-1][1] - 800, random.randint(0, 1)]) #Adds new bird below previous one (space between is value 800)
+                self.enemies.append([random.randint(0, self.width-self.birdwidth), self.enemies[-1][1] - 800, random.randint(0, 1)]) #Adds new bird below previous one (space between is value 800)
                 self.enemies.pop(0)           #Removes the 0th entry in enemies
             self.screen.blit(self.bird, (e[0], e[1] - self.cameray))
                 
@@ -217,7 +217,7 @@ class DoodleJump:
                 else:
                     platformtype = 1
 
-                self.platforms.append([random.randint(0, 700), self.platforms[-1][1] - 80, platformtype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 80)
+                self.platforms.append([random.randint(0, self.width-self.platformwidth), self.platforms[-1][1] - 80, platformtype, random.randint(0, 1)]) #Adds new platform below previous one (space between is value 80)
                 self.platforms.pop(0)           #removes the 0th entry in platforms
                 self.score += 100 #Add to player's score
             self.screen.blit(self.lily, (p[0], p[1] - self.cameray)) #Copy lilpad image to screen
@@ -232,7 +232,7 @@ class DoodleJump:
             else:
                 platformtype = 1
 
-            self.platforms.append([random.randint(0,700), on, platformtype, random.randint(0, 1)])
+            self.platforms.append([random.randint(0,self.width-self.platformwidth), on, platformtype, random.randint(0, 1)])
             on -= 80
 
 
