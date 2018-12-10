@@ -1,7 +1,7 @@
 Welome to Next Hop!
 
 Next Hop was inspired by doodle jump, for which there are many examples online for. 
-The major inspirations can be found with the CONTRIB File.
+The major inspirations can be found within the CONTRIB File.
 
 Next Hop tells the story of a Frog(the player character) as they make their perilous journey up a waterfall.
 Along our hero's journey dangerous birds and moving lilly pads will cause you to tumble back down to earth. 
