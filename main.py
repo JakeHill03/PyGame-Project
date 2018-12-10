@@ -15,10 +15,10 @@ image_dir = path.join(path.dirname(__file__), 'images') #Add path to use the ima
 sound_dir = path.join(path.dirname(__file__), 'sound') #Add path to use sound folder 
 
 #Load in sounds
-pygame.mixer.music.load("background_music.wav")
-falling_noise = pygame.mixer.Sound("falling_sound.wav")
-jumping_noise = pygame.mixer.Sound("jump_sound.wav")
-powerup_noise = pygame.mixer.Sound("powerup.wav")
+pygame.mixer.music.load("music/background_music.wav")
+falling_noise = pygame.mixer.Sound("music/falling_sound.wav")
+jumping_noise = pygame.mixer.Sound("music/jump_sound.wav")
+powerup_noise = pygame.mixer.Sound("music/powerup.wav")
 pygame.mixer.pre_init(44100,16,2,4096) #initialises the pygame mixer module for loading and playing sound files and music
 pygame.mixer.music.set_volume(0.5) #Set music volume
 pygame.mixer.music.play(-1) #Play music
