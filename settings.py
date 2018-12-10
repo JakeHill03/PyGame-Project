@@ -8,7 +8,7 @@ NEXT HOP! SETTINGS
 
 white = (255, 255, 255)
 blue = (0, 0, 200)
-light_blue = (0, 155, 155)
+light_blue = (153, 204, 255)
 FPS = 60
 
 hs_file = "highscore.txt"
