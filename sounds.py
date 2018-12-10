@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Dec 10 12:17:03 2018
 
-@author: srtod
-"""
 import pygame
 from os import path
 
