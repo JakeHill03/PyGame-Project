@@ -25,7 +25,7 @@ pygame.mixer.music.play(-1) #Play music
 hs_file = "highscore.txt"
 Font_Name="scoreboard"
 
-class DoodleJump:
+class NextHop:
     def __init__(self):
         
         self.width=800 #Set game width
@@ -290,7 +290,7 @@ class DoodleJump:
         self.messageToScreen("High Score: " + str(self.highscore), 25, white, self.width / 2, 35) #Updates current highscore and displays on start screen
         pygame.display.update()
         self.waitForKeyPress()
-        DoodleJump().run()
+        NextHop().run()
 
 
     def gameOverScreen(self):
@@ -311,8 +311,8 @@ class DoodleJump:
         
         pygame.display.update()
         self.waitForKeyPress()
-        DoodleJump().__init__()
-        DoodleJump().run()
+        NextHop().__init__()
+        NextHop().run()
    
     #Function waits until a key is pressed before next action is executed such as updating the screen
     def waitForKeyPress(self):
@@ -327,4 +327,4 @@ class DoodleJump:
 
 
 #Displays start screen when code file is run
-DoodleJump().startScreen()
+NextHop().startScreen()
