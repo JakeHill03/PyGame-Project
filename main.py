@@ -1,32 +1,14 @@
 #Import necessary packages
 import pygame
 import random
+from settings import *
+from sounds import *
 from os import path
-
-#Declare colour variables
-white = (255, 255, 255)
-blue = (0, 0, 200)
-FPS = 60
-
-pygame.init() #Initialise pygame module
-image_dir = path.join(path.dirname(__file__), 'images') #Add path to use the images folder, so files can be referenced
-music_dir = path.join(path.dirname(__file__), 'music') #Add path to use sound folder 
-
-#Load in sounds
-pygame.mixer.music.load(path.join(music_dir, "background_music.wav"))
-falling_noise = pygame.mixer.Sound(path.join(music_dir, "falling_sound.wav"))
-jumping_noise = pygame.mixer.Sound(path.join(music_dir, "jump_sound.wav"))
-powerup_noise = pygame.mixer.Sound(path.join(music_dir, "powerup.wav"))
-pygame.mixer.pre_init(44100,16,2,4096) #initialises the pygame mixer module for loading and playing sound files and music
-pygame.mixer.music.set_volume(0.5) #Set music volume
-pygame.mixer.music.play(-1) #Play music
-
-#Declare scoreboard variables
-hs_file = "highscore.txt"
-Font_Name="scoreboard"
 
 class NextHop:
     def __init__(self):
+        
+        pygame.init() #Initialise pygame module
         
         self.width=800 #Set game width
         self.height=600 #Set game height
@@ -235,7 +217,7 @@ class NextHop:
 
 
     def drawBackground(self):
-        self.screen.fill(pygame.Color("light blue")) # Makes screen background light blue
+        self.screen.fill(light_blue) # Makes screen background light blue
        
     
     def run(self): #Take that out and make into game loop

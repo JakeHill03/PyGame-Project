@@ -7,15 +7,9 @@ NEXT HOP! SETTINGS
 """
 
 white = (255, 255, 255)
-black = (0, 0, 0)
-green = (0, 200, 0)
 blue = (0, 0, 200)
-
+light_blue = (0, 155, 155)
 FPS = 60
 
-#power_up_boost = -40
-#power_up_spawn_freq = 7
-
-#enemy_freq = 5000
 hs_file = "highscore.txt"
 Font_Name="scoreboard"
