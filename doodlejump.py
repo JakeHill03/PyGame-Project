@@ -37,12 +37,12 @@ class DoodleJump:
         pygame.display.set_caption("Next Hop!") #Set game window caption
         
         #Load images and convert them to the same pixel format as used by the screen.(optimizes performance)
-        self.lily = pygame.image.load("images/sprite_images/lily_pad_sprite.png").convert_alpha() 
-        self.playerstat = pygame.image.load("images/sprite_images/frog_sit_sprite.png").convert_alpha() 
-        self.playerRight = pygame.image.load("images/sprite_images/jump_right.png").convert_alpha()
-        self.playerLeft = pygame.image.load("images/sprite_images/jump_left.png").convert_alpha()
-        self.fly = pygame.image.load("images/sprite_images/fly_sprite.png").convert_alpha()
-        self.bird = pygame.image.load("images/sprite_images/bird_2.png").convert_alpha()
+        self.lily = pygame.image.load("images/lily_pad_sprite.png").convert_alpha() 
+        self.playerstat = pygame.image.load("images/frog_sit_sprite.png").convert_alpha() 
+        self.playerRight = pygame.image.load("images/jump_right.png").convert_alpha()
+        self.playerLeft = pygame.image.load("images/jump_left.png").convert_alpha()
+        self.fly = pygame.image.load("images/fly_sprite.png").convert_alpha()
+        self.bird = pygame.image.load("images/bird_2.png").convert_alpha()
         
         #Set objects widths and heights
         self.playerwidth = self.playerstat.get_width()
