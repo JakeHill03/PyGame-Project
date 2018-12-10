@@ -5,10 +5,10 @@ from settings import *
 from sounds import *
 from os import path
 
+pygame.init() #Initialise pygame module
+
 class NextHop:
     def __init__(self):
-        
-        pygame.init() #Initialise pygame module
         
         self.width=800 #Set game width
         self.height=600 #Set game height
